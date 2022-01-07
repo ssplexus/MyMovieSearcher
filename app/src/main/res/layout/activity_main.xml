@@ -90,24 +90,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/avengers" />
             <ImageView
                 android:id="@+id/imageView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/goodfellas" />
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/halloween_24x36_500x749" />
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:scaleType="centerCrop"
                 app:srcCompat="@drawable/onceuponatimehollywood_flo_ar_500x749" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
