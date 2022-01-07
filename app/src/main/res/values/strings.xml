@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyMovieSearcher</string>
+    <string name="disclaimer">Posters provided by https://www.movieposters.com</string>
+    <string name="btn_menu">Menu</string>
+    <string name="btn_fav">Favorites</string>
+    <string name="btn_later">Watch later</string>
+    <string name="btn_compile">Compilations</string>
+    <string name="btn_settings">Settings</string>
 </resources>
