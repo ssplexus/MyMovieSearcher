@@ -12,11 +12,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        button_menu.setOnClickListener { Toast.makeText(this, button_menu.text,Toast.LENGTH_LONG).show() }
-        button_fav.setOnClickListener { Toast.makeText(this, button_fav.text,Toast.LENGTH_LONG).show() }
-        button_later.setOnClickListener { Toast.makeText(this, button_later.text,Toast.LENGTH_LONG).show() }
-        button_compile.setOnClickListener { Toast.makeText(this, button_compile.text,Toast.LENGTH_LONG).show() }
-        button_settings.setOnClickListener { Toast.makeText(this, button_settings.text,Toast.LENGTH_LONG).show() }
+        button_menu.setOnClickListener { Toast.makeText(this, button_menu.text,Toast.LENGTH_SHORT).show() }
+        button_fav.setOnClickListener { Toast.makeText(this, button_fav.text,Toast.LENGTH_SHORT).show() }
+        button_later.setOnClickListener { Toast.makeText(this, button_later.text,Toast.LENGTH_SHORT).show() }
+        button_compile.setOnClickListener { Toast.makeText(this, button_compile.text,Toast.LENGTH_SHORT).show() }
+        button_settings.setOnClickListener { Toast.makeText(this, button_settings.text,Toast.LENGTH_SHORT).show() }
 
     }
 
