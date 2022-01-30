@@ -14,8 +14,31 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="CardView.Posters_normal" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">130dp</item>
+        <item name="android:layout_height">180dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:stateListAnimator">@animator/cardview_selector</item>
+    </style>
+    <style name="CardView.Posters_large" parent="Widget.MaterialComponents.CardView">
+        <item name="android:layout_width">200dp</item>
+        <item name="android:layout_height">250dp</item>
+        <item name="cardCornerRadius">20dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:stateListAnimator">@animator/cardview_selector</item>
+    </style>
+
     <style name="Button.White" parent="ThemeOverlay.AppCompat">
         <item name="colorPrimary">@color/purple_200</item>
     </style>
+
+    <style name="Toolbar.TitleTextSmall" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="Toolbar.TitleTextLarge" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">24sp</item>
+    </style>
+
 
 </resources>
