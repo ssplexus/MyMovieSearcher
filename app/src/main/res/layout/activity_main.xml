@@ -25,93 +25,16 @@
 
                 app:title="@string/page_title"
                 app:titleTextColor="@color/white" />
-<!--
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:title="Skillfactory"
-                app:titleTextColor="@android:color/white"
-                app:menu="@menu/top_app_bar"
-                app:navigationIcon="@drawable/ic_round_menu_24" />-->
-
         </com.google.android.material.appbar.AppBarLayout>
-
-
-<!--
-    <LinearLayout
-        android:id="@+id/buttons"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/corner_background"
-        android:padding="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/posters"
-        app:layout_constraintBottom_toTopOf="@id/bottom_menu"
-        app:layout_constraintVertical_chainStyle="packed"
-        >
-        <Button
-            android:id="@+id/button_menu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:background="?selectableItemBackgroundBorderless"
-            android:text="@string/btn_menu"
-             />
-
-        <Button
-            android:id="@+id/button_fav"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:background="?selectableItemBackgroundBorderless"
-            android:text="@string/btn_fav" />
-
-        <Button
-            android:id="@+id/button_later"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:background="?selectableItemBackgroundBorderless"
-            android:text="@string/btn_later" />
-
-        <Button
-            android:id="@+id/button_compile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:background="?selectableItemBackgroundBorderless"
-            android:text="@string/btn_compile" />
-
-        <Button
-            android:id="@+id/button_settings"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:background="?selectableItemBackgroundBorderless"
-            android:text="@string/btn_settings" />
-    </LinearLayout>-->
-
-    <!--
-    <FrameLayout
-        android:id="@+id/bottom_menu"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#03A9F4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        >
-    </FrameLayout>-->
 
     <androidx.cardview.widget.CardView
         android:id="@+id/posters"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/cardv_normal_height"
         app:layout_constraintTop_toBottomOf="@id/top_menu"
-        app:cardCornerRadius="15dp"
-        android:layout_margin="5dp"
-        app:cardElevation="30dp"
+        app:cardCornerRadius="@dimen/cardv_normal_corn_rad"
+        android:layout_margin="@dimen/cardv_normal_margin"
+        app:cardElevation="@dimen/cardv_normal_elevation"
         >
         <LinearLayout
             android:orientation="horizontal"
@@ -154,9 +77,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/tview_normal_margin_top"
         android:autoLink="web"
         android:linksClickable="true"
+        android:minHeight="@dimen/tview_normal_min_height"
         android:text="@string/disclaimer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Normal-->
+
+    <dimen name="cardv_normal_height">150dp</dimen>
+    <dimen name="cardv_normal_corn_rad">15dp</dimen>
+    <dimen name="cardv_normal_margin">5dp</dimen>
+    <dimen name="cardv_normal_elevation">30dp</dimen>
+
+    <dimen name="mtbar_normal_height">75dp</dimen>
+
+    <dimen name="tview_normal_margin_top">24dp</dimen>
+    <dimen name="tview_normal_min_height">48dp</dimen>
+
+    <!--Large-->
+
+    <dimen name="cardv_large_height">250dp</dimen>
+    <dimen name="cardv_large_corn_rad">30dp</dimen>
+    <dimen name="cardv_large_margin">10dp</dimen>
+    <dimen name="cardv_large_elevation">60dp</dimen>
+
+    <dimen name="mtbar_large_height">75dp</dimen>
+
+    <dimen name="tview_large_margin_top">24dp</dimen>
+    <dimen name="tview_large_text_size">24sp</dimen>
+
+    <dimen name="bottom_nav_large_height">75dp</dimen>
+
+    <!--Small-->
+
+    <dimen name="appbar_small_height">45dp</dimen>
+
+    <dimen name="cardv_small_height">40dp</dimen>
+    <dimen name="cardv_small_corn_rad">5dp</dimen>
+    <dimen name="cardv_small_margin">2dp</dimen>
+    <dimen name="cardv_small_elevation">20dp</dimen>
+
+    <dimen name="tview_small_margin_top">2dp</dimen>
+    <dimen name="tview_small_text_size">6sp</dimen>
+
+    <dimen name="bottom_nav_small_height">45dp</dimen>
+
+</resources>
