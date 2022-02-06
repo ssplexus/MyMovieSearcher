@@ -20,7 +20,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/mtbar_large_height"
             app:title="@string/page_title"
+            app:titleTextAppearance="@style/Toolbar.TitleTextLarge"
             app:navigationIcon="@drawable/ic_round_menu_24"
+
             app:menu="@menu/toolbar"
             style="@style/Widget.MaterialComponents.Toolbar.Primary" />
 
@@ -74,6 +76,7 @@
 
 
     <TextView
+        android:id="@+id/disclaimer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/tview_large_margin_top"
@@ -85,6 +88,61 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/posters" />
 
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/disclaimer"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="16dp"
+        android:columnCount="2"
+        android:orientation="horizontal"
+        android:useDefaultMargins="true"
+        android:layoutAnimation="@anim/cardview_anim_layout"
+        >
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_1"
+            style="@style/CardView.Posters_large">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ghostbusters_500x749"
+                android:scaleType="center"/>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_2"
+            style="@style/CardView.Posters_large">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/lightyear_jnzbm10y_240x360"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_3"
+            style="@style/CardView.Posters_large">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/sonichedgehog2_240x360"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_4"
+            style="@style/CardView.Posters_large">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/cristmas_vocation_500x749"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+    </GridLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

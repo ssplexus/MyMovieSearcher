@@ -22,6 +22,7 @@
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/toolbar"
             app:navigationIcon="@drawable/ic_round_menu_24"
+            app:titleTextAppearance="@style/Toolbar.TitleTextSmall"
             app:title="@string/page_title" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -93,7 +94,8 @@
         android:background="@color/design_default_color_primary_dark"
         app:itemTextColor="@android:color/white"
         app:itemIconTint="@android:color/white"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="unlabeled"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/navigation" />
 
