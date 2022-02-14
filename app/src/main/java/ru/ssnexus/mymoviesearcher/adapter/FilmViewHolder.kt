@@ -3,7 +3,7 @@ package ru.ssnexus.mymoviesearcher.adapter
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.film_item.view.*
-import ru.ssnexus.mymoviesearcher.Film
+import ru.ssnexus.mymoviesearcher.model.Film
 
 class FilmViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
     //Привязываем View из layout к переменным

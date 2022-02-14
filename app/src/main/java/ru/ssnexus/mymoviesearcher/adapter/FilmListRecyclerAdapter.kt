@@ -1,15 +1,26 @@
 package ru.ssnexus.mymoviesearcher.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.film_item.view.*
-import ru.ssnexus.mymoviesearcher.Film
 import ru.ssnexus.mymoviesearcher.R
+import ru.ssnexus.mymoviesearcher.model.Film
+import ru.ssnexus.mymoviesearcher.model.Item
+import ru.ssnexus.mymoviesearcher.model.ItemDiffUtil
 
 //в параметр передаем слушатель, чтобы мы потом могли обрабатывать нажатия из класса Activity
 class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     //Здесь у нас хранится список элементов для RV
-    private val items = mutableListOf<Film>()
+    private var items = mutableListOf<Film>()
+
+    fun setItems(items: List<Item>) {
+        this.items = items as MutableList<Film>
+    }
+
+    fun getItems() : List<Film>{
+        return items
+    }
 
     //Этот метод нужно переопределить на возврат количества элементов в списке RV
     override fun getItemCount() = items.size
@@ -39,13 +50,20 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : 
 
 
     //Метод для добавления объектов в наш список
-    fun addItems(list: List<Film>) {
-        //Сначала очищаем(если не реализовать DiffUtils)
-        items.clear()
-        //Добавляем
-        items.addAll(list)
-        //Уведомляем RV, что пришел новый список, и ему нужно заново все "привязывать"
-        notifyDataSetChanged()
+    fun addItems(list: List<Item>) {
+
+        val newList = arrayListOf<Item>()
+        newList.addAll(list)
+        val  diff = ItemDiffUtil(getItems(), newList)
+        val difResult = DiffUtil.calculateDiff(diff)
+        setItems(newList)
+        difResult.dispatchUpdatesTo(this)
+//        //Сначала очищаем(если не реализовать DiffUtils)
+//        items.clear()
+//        //Добавляем
+//        items.addAll(list)
+//        //Уведомляем RV, что пришел новый список, и ему нужно заново все "привязывать"
+//        notifyDataSetChanged()
     }
 
     //Интерфейс для обработки кликов
