@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyMovieSearcher</string>
+    <string name="app_name">My Movie Searcher</string>
     <string name="page_title">Search it!</string>
     <string name="disclaimer">Posters provided by https://www.movieposters.com</string>
     <string name="btn_menu">Menu</string>
