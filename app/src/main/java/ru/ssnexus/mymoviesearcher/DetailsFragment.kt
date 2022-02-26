@@ -27,7 +27,7 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         //Получаем наш фильм из переданного бандла
-        val film = arguments?.get("film") as Film
+        val film = arguments?.get(R.string.parcel_item_film.toString()) as Film
         //Устанавливаем заголовок
         details_toolbar.title = film.title
         //Устанавливаем картинку

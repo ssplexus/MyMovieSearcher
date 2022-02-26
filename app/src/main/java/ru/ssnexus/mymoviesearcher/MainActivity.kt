@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         //Создаем "посылку"
         val bundle = Bundle()
         //Кладем наш фильм в "посылку"
-        bundle.putParcelable("film", film)
+        bundle.putParcelable(R.string.parcel_item_film.toString(), film)
         //Кладем фрагмент с деталями в перменную
         val fragment = DetailsFragment()
         //Прикрепляем нашу "посылку" к фрагменту
@@ -57,9 +57,9 @@ class MainActivity : AppCompatActivity() {
         {
 
             AlertDialog.Builder(this)
-                .setTitle("Вы хотите выйти?")
+                .setTitle(R.string.is_exit)
                 .setIcon(R.drawable.ic_round_menu_24)
-                .setPositiveButton("Да") { _, _ ->
+                .setPositiveButton(R.string.yes) { _, _ ->
                     super.onBackPressed()
                     if(android.os.Build.VERSION.SDK_INT >= 21)
                     {
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     System.exit(0);
                 }
-                .setNegativeButton("Нет") { _, _ ->
+                .setNegativeButton(R.string.no) { _, _ ->
 
                 }
                 .show()
@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.settings -> {
-                    Toast.makeText(this, "Настройки", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, R.string.btn_settings, Toast.LENGTH_SHORT).show()
                     true
                 }
                 else -> false
@@ -105,19 +105,19 @@ class MainActivity : AppCompatActivity() {
             when (it.itemId) {
                 R.id.favorites -> {
                     //Toast.makeText(this, "Избранное", Toast.LENGTH_SHORT).show()
-                    snackbar.setText("Избранное")
+                    snackbar.setText(R.string.btn_fav)
                     snackbar.show()
                     true
                 }
                 R.id.watch_later -> {
                     //Toast.makeText(this, "Посмотреть позже", Toast.LENGTH_SHORT).show()
-                    snackbar.setText("Посмотреть позже")
+                    snackbar.setText(R.string.btn_later)
                     snackbar.show()
                     true
                 }
                 R.id.selections -> {
                     //Toast.makeText(this, "Подборки", Toast.LENGTH_SHORT).show()
-                    snackbar.setText("Подборки")
+                    snackbar.setText(R.string.btn_compile)
                     snackbar.show()
                     true
                 }
