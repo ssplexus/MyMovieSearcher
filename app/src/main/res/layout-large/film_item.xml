@@ -23,9 +23,9 @@
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            android:layout_width="@dimen/film_item_tview_large_width"
             android:layout_height="wrap_content"
-            android:padding="8dp"
+            android:padding="@dimen/film_item_tview_large_pad"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textSize="@dimen/tview_large_text_size"
@@ -38,9 +38,9 @@
 
         <TextView
             android:id="@+id/description"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:padding="8dp"
+            android:layout_width="@dimen/film_item_tview_large_width"
+            android:layout_height="@dimen/film_item_tview_large_height"
+            android:padding="@dimen/film_item_tview_large_pad"
             android:textSize="@dimen/tview_large_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/poster"
