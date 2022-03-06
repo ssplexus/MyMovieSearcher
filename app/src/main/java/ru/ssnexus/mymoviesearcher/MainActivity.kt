@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.ssnexus.mymoviesearcher.fragments.FavoritesFragment
 import ru.ssnexus.mymoviesearcher.fragments.HomeFragment
 import ru.ssnexus.mymoviesearcher.helper.ItemTouchHelperCallback
 import ru.ssnexus.mymoviesearcher.model.Film
@@ -18,13 +19,15 @@ import ru.ssnexus.mymoviesearcher.model.decoration.TopSpacingItemDecoration
 
 class MainActivity : AppCompatActivity() {
 
-
+    val db : MoviesDatabase = MoviesDatabase()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initDB()
         initNavigation()
+
         //Запускаем фрагмент при старте
         supportFragmentManager
             .beginTransaction()
@@ -32,6 +35,20 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
 
+    }
+
+    fun initDB()
+    {
+        db.setDB(listOf(
+            Film(0,"Black Phone", R.drawable.black_phone, "After being abducted by a child killer and locked in a soundproof basement, a 13-year-old boy starts receiving calls on a disconnected phone from the killer's previous victims."),
+            Film(1,"Hannibal", R.drawable.hannibal,"Living in exile, Dr. Hannibal Lecter tries to reconnect with now disgraced F.B.I. Agent Clarice Starling, and finds himself a target for revenge from a powerful victim."),
+            Film(2,"Horse Whisperer", R.drawable.horse_whisperer,"The mother of a severely traumatized daughter enlists the aid of a unique horse trainer to help the girl's equally injured horse."),
+            Film(3,"Hostel", R.drawable.hostel,"Three backpackers head to a Slovak city that promises to meet their hedonistic expectations, with no idea of the hell that awaits them."),
+            Film(4,"Lost City", R.drawable.lost_city, "A reclusive romance novelist on a book tour with her cover model gets swept up in a kidnapping attempt that lands them both in a cutthroat jungle adventure."),
+            Film(5,"Saw",R.drawable.sawx,"As a deadly battle rages over Jigsaw's brutal legacy, a group of Jigsaw survivors gathers to seek the support of self-help guru and fellow survivor Bobby Dagen, a man whose own dark secrets unleash a new wave of terror."),
+            Film(6,"When Will I Be Loved", R.drawable.when_will_i_be_loved, "Feeling undervalued by her boyfriend, a young woman begins to explore her sexuality with other people.")
+            )
+        )
     }
 
     fun launchDetailsFragment(film: Film) {
@@ -104,9 +121,12 @@ class MainActivity : AppCompatActivity() {
 
             when (it.itemId) {
                 R.id.favorites -> {
-                    //Toast.makeText(this, "Избранное", Toast.LENGTH_SHORT).show()
-                    snackbar.setText(R.string.btn_fav)
-                    snackbar.show()
+                    //Запускаем фрагмент "избранное"
+                    supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.fragment_placeholder, FavoritesFragment())
+                        .addToBackStack(null)
+                        .commit()
                     true
                 }
                 R.id.watch_later -> {

@@ -3,6 +3,13 @@
 
     <!--Normal-->
 
+    <!--{ Film item view-->
+    <dimen name="film_item_iview_normal_width">150dp</dimen>
+    <dimen name="film_item_tview_normal_width">0dp</dimen>
+    <dimen name="film_item_tview_normal_height">0dp</dimen>
+    <dimen name="film_item_tview_normal_pad">8dp</dimen>
+    <!-- } Film item view-->
+
     <dimen name="cardv_normal_height">150dp</dimen>
     <dimen name="cardv_normal_corn_rad">15dp</dimen>
     <dimen name="cardv_normal_margin">5dp</dimen>
@@ -36,7 +43,12 @@
     <dimen name="act_detail_TextView_normal_layout_margin">8dp</dimen>
     <dimen name="act_detail_TextView_large_layout_margin">10dp</dimen>
 
+    <!--{ Film item view-->
     <dimen name="film_item_iview_large_width">200dp</dimen>
+    <dimen name="film_item_tview_large_width">0dp</dimen>
+    <dimen name="film_item_tview_large_height">0dp</dimen>
+    <dimen name="film_item_tview_large_pad">8dp</dimen>
+    <!-- } Film item view-->
 
     <!--Small-->
 

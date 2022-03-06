@@ -6,5 +6,9 @@ import kotlinx.android.parcel.Parcelize
 import ru.ssnexus.mymoviesearcher.model.Item
 
 @Parcelize
-data class Film(override val id: Int, val title:String, @DrawableRes val poster:Int, val description:String):Parcelable,
+data class Film(override val id: Int,
+                val title:String,
+                @DrawableRes val poster:Int,
+                val description:String,
+                var isInFavorites: Boolean = false):Parcelable,
     Item
