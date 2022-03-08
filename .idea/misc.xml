@@ -10,6 +10,7 @@
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_baseline_favorite_24.xml" value="0.17297297297297298" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_round_settings_24.xml" value="0.14054054054054055" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_round_view_list_24.xml" value="0.14054054054054055" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/background_search_view.xml" value="0.18018018018018017" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/corner_background.xml" value="0.14054054054054055" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.17297297297297298" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.14054054054054055" />
@@ -25,7 +26,9 @@
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/film_item.xml" value="0.12" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_details.xml" value="0.13006756756756757" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_favorites.xml" value="0.16" />
-        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_home.xml" value="0.33" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/general_recycler.xml" value="0.21666666666666667" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/main_recycler.xml" value="0.21666666666666667" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/menu/navigation.xml" value="0.13006756756756757" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/menu/toolbar.xml" value="0.13006756756756757" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.13817567567567568" />

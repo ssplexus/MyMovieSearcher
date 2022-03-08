@@ -3,6 +3,11 @@
 
     <!--Normal-->
 
+    <!--{ Fragment home-->
+    <dimen name="fragment_home_collapsing_tbar_min_height">60dp</dimen>
+    <dimen name="fragment_home_search_view_layout_margin">8dp</dimen>
+    <!--} Fragment home-->
+
     <!--{ Film item view-->
     <dimen name="film_item_iview_normal_width">150dp</dimen>
     <dimen name="film_item_tview_normal_width">0dp</dimen>
