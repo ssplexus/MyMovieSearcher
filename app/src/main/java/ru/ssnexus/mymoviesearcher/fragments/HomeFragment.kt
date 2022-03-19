@@ -1,6 +1,8 @@
 package ru.ssnexus.mymoviesearcher.fragments
 
 import android.os.Bundle
+import android.transition.*
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.merge_home_screen_content.*
 import ru.ssnexus.mymoviesearcher.MainActivity
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
@@ -24,7 +27,12 @@ import java.util.*
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
 class HomeFragment : Fragment() {
+    init {
+//        exitTransition = Fade().apply { duration = 800;mode = Fade.MODE_OUT }
+//        reenterTransition = Fade().apply { duration = 800; }
+    }
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +49,23 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val scene = Scene.getSceneForLayout(home_fragment_root, R.layout.merge_home_screen_content, requireContext())
+
+        //Создаем анимацию выезда поля поиска сверху
+        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
+        //Создаем анимацию выезда RV снизу
+        val recyclerSlide = Slide(Gravity.BOTTOM).addTarget(R.id.main_recycler)
+        //Создаем экземпляр TransitionSet, который объединит все наши анимации
+        val customTransition = TransitionSet().apply {
+            //Устанавливаем время, за которое будет проходить анимация
+            duration = 500
+            //Добавляем сами анимации
+            addTransition(recyclerSlide)
+            addTransition(searchSlide)
+        }
+
+        TransitionManager.go(scene, customTransition)
 
         val filmsDataBase = (requireActivity() as MainActivity).db.getDB()
 
@@ -73,10 +98,10 @@ class HomeFragment : Fragment() {
             }
         })
 
-        RV_Init(filmsDataBase)
+        rv_init(filmsDataBase)
     }
 
-    fun RV_Init(db : List<Film>){
+    fun rv_init(db : List<Film>){
         if(db == null || db.isEmpty()) return
         //находим наш RV
         main_recycler.apply {

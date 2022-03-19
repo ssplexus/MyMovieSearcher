@@ -1,17 +1,16 @@
 package ru.ssnexus.mymoviesearcher.fragments
 
 import android.os.Bundle
+import android.transition.Fade
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_favorites.*
-import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.merge_home_screen_content.*
 import ru.ssnexus.mymoviesearcher.MainActivity
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
@@ -21,6 +20,12 @@ import ru.ssnexus.mymoviesearcher.model.decoration.TopSpacingItemDecoration
 
 
 class FavoritesFragment : Fragment() {
+    init {
+        exitTransition = Fade().apply { duration = 800;mode = Fade.MODE_OUT }
+        reenterTransition = Fade().apply { duration = 800; }
+
+    }
+
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,10 +43,10 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        RV_Init((requireActivity() as MainActivity).db.getFavorites())
+        rv_init((requireActivity() as MainActivity).db.getFavorites())
     }
 
-    fun RV_Init(db : List<Film>){
+    fun rv_init(db : List<Film>){
         if(db == null || db.isEmpty())
         {
 

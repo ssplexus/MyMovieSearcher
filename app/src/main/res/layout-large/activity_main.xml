@@ -8,38 +8,18 @@
     tools:context=".MainActivity"
     android:background="@drawable/corner_background">
 
-    <!--
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/top_menu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/fragment_placeholder">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/mtbar_large_height"
-            app:title="@string/page_title"
-            app:titleTextAppearance="@style/Toolbar.TitleTextLarge"
-            app:navigationIcon="@drawable/ic_round_menu_24"
-
-            app:menu="@menu/toolbar"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary" />
-
-    </com.google.android.material.appbar.AppBarLayout>-->
-
     <FrameLayout
         android:id="@+id/fragment_placeholder"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/top_menu"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"/>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/bottom_nav_large_height"
+        android:layout_height="wrap_content"
         android:background="@color/design_default_color_primary_dark"
         app:itemTextColor="@android:color/white"
         app:itemIconTint="@android:color/white"
