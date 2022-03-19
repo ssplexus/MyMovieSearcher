@@ -1,21 +1,15 @@
 package ru.ssnexus.mymoviesearcher
 
-import android.content.Intent
-import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.ssnexus.mymoviesearcher.fragments.DetailsFragment
 import ru.ssnexus.mymoviesearcher.fragments.FavoritesFragment
 import ru.ssnexus.mymoviesearcher.fragments.HomeFragment
-import ru.ssnexus.mymoviesearcher.helper.ItemTouchHelperCallback
 import ru.ssnexus.mymoviesearcher.model.Film
-import ru.ssnexus.mymoviesearcher.model.Item
-import ru.ssnexus.mymoviesearcher.model.decoration.TopSpacingItemDecoration
 
 class MainActivity : AppCompatActivity() {
 
@@ -102,6 +96,7 @@ class MainActivity : AppCompatActivity() {
 
     fun initNavigation()
     {
+        /*
         topAppBar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.settings -> {
@@ -114,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 
         topAppBar.setNavigationOnClickListener {
             Toast.makeText(this, "Когда-нибудь здесь будет навигация...", Toast.LENGTH_SHORT).show()
-        }
+        }*/
         bottom_navigation.setOnNavigationItemSelectedListener {
 
             val snackbar = Snackbar.make(layout_main, "", Snackbar.LENGTH_SHORT)
