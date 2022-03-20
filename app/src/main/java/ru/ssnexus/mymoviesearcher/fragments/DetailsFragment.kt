@@ -2,6 +2,9 @@ package ru.ssnexus.mymoviesearcher.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.transition.Fade
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,11 @@ import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.model.Film
 
 class DetailsFragment : Fragment() {
+    init {
+        enterTransition = Fade().apply { duration = 800 }
+        returnTransition = Fade().apply { duration = 100;mode = Fade.MODE_OUT }
+        exitTransition = Fade().apply { duration = 800 }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
