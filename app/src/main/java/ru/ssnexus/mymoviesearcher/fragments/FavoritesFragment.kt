@@ -10,7 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_favorites.*
-import kotlinx.android.synthetic.main.merge_home_screen_content.*
+import kotlinx.android.synthetic.main.fragment_home.*
+import ru.ssnexus.mymoviesearcher.AnimationHelper
 import ru.ssnexus.mymoviesearcher.MainActivity
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
@@ -44,6 +45,7 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         rv_init((requireActivity() as MainActivity).db.getFavorites())
+        AnimationHelper.performFragmentCircularRevealAnimation(favorites_fragment_root, requireActivity(), 2)
     }
 
     fun rv_init(db : List<Film>){

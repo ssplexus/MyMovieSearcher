@@ -10,11 +10,19 @@
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_baseline_favorite_24.xml" value="0.17297297297297298" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_round_settings_24.xml" value="0.14054054054054055" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_round_view_list_24.xml" value="0.14054054054054055" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable-v24/ic_round_watch_later_24.xml" value="0.3247747747747748" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/background_search_view.xml" value="0.18018018018018017" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/corner_background.xml" value="0.14054054054054055" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/favorites_background.xml" value="0.31756756756756754" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_baseline_favorite_border_24.xml" value="0.17297297297297298" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.3247747747747748" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_baseline_share_24.xml" value="0.14054054054054055" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_round_settings_48.xml" value="0.14054054054054055" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/ic_round_watch_later_24.xml" value="0.18288288288288287" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/main_background.xml" value="0.31756756756756754" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/mainunder_background.xml" value="0.31756756756756754" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/selections_background.xml" value="0.31756756756756754" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/drawable/watchlater_background.xml" value="0.31756756756756754" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout-large/activity_details.xml" value="0.14765625" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout-large/activity_main.xml" value="0.2" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout-large/film_item.xml" value="0.14765625" />
@@ -27,6 +35,8 @@
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_details.xml" value="0.13006756756756757" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_favorites.xml" value="0.16" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_home.xml" value="0.2" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_selections.xml" value="0.3036036036036036" />
+        <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/fragment_watch_later.xml" value="0.29864864864864865" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/general_recycler.xml" value="0.21666666666666667" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/main_recycler.xml" value="0.21666666666666667" />
         <entry key="..\:/Android_Projects/Projects/MyMovieSearcher/app/src/main/res/layout/merge_home_screen_content.xml" value="0.15765765765765766" />

@@ -1,14 +1,12 @@
 package ru.ssnexus.mymoviesearcher
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
-import ru.ssnexus.mymoviesearcher.fragments.DetailsFragment
-import ru.ssnexus.mymoviesearcher.fragments.FavoritesFragment
-import ru.ssnexus.mymoviesearcher.fragments.HomeFragment
+import ru.ssnexus.mymoviesearcher.fragments.*
 import ru.ssnexus.mymoviesearcher.model.Film
 
 class MainActivity : AppCompatActivity() {
@@ -63,10 +61,74 @@ class MainActivity : AppCompatActivity() {
             .commit()
     }
 
+    fun initNavigation()
+    {
+        /*
+        topAppBar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.settings -> {
+                    Toast.makeText(this, R.string.btn_settings, Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
+
+        topAppBar.setNavigationOnClickListener {
+            Toast.makeText(this, "Когда-нибудь здесь будет навигация...", Toast.LENGTH_SHORT).show()
+        }*/
+
+        bottom_navigation.setOnNavigationItemSelectedListener {
+
+            val snackbar = Snackbar.make(layout_main, "", Snackbar.LENGTH_SHORT)
+
+            when (it.itemId) {
+
+                R.id.home -> {
+                    val tag = "home"
+                    val fragment = checkFragmentExistence(tag)
+                    //В первом параметре, если фрагмент не найден и метод вернул null, то с помощью
+                    //элвиса мы вызываем создание нового фрагмента
+                    changeFragment( fragment?: HomeFragment(), tag)
+                    true
+                }
+                R.id.favorites -> {
+                    val tag = "favorites"
+                    val fragment = checkFragmentExistence(tag)
+                    changeFragment( fragment?: FavoritesFragment(), tag)
+                    true
+                }
+                R.id.watch_later -> {
+                    val tag = "watch_later"
+                    val fragment = checkFragmentExistence(tag)
+                    changeFragment( fragment?: WatchLaterFragment(), tag)
+                    true
+                }
+                R.id.selections -> {
+                    val tag = "selections"
+                    val fragment = checkFragmentExistence(tag)
+                    changeFragment( fragment?: SelectionsFragment(), tag)
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    //Ищем фрагмент по тегу, если он есть то возвращаем его, если нет, то null
+    private fun checkFragmentExistence(tag: String): Fragment? = supportFragmentManager.findFragmentByTag(tag)
+
+    private fun changeFragment(fragment: Fragment, tag: String) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.fragment_placeholder, fragment, tag)
+            .addToBackStack(null)
+            .commit()
+    }
+
     override fun onBackPressed() {
         if(supportFragmentManager.backStackEntryCount == 1)
         {
-
             AlertDialog.Builder(this)
                 .setTitle(R.string.is_exit)
                 .setIcon(R.drawable.ic_round_menu_24)
@@ -92,53 +154,6 @@ class MainActivity : AppCompatActivity() {
         else
             super.onBackPressed()
 
-    }
-
-    fun initNavigation()
-    {
-        /*
-        topAppBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.settings -> {
-                    Toast.makeText(this, R.string.btn_settings, Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> false
-            }
-        }
-
-        topAppBar.setNavigationOnClickListener {
-            Toast.makeText(this, "Когда-нибудь здесь будет навигация...", Toast.LENGTH_SHORT).show()
-        }*/
-        bottom_navigation.setOnNavigationItemSelectedListener {
-
-            val snackbar = Snackbar.make(layout_main, "", Snackbar.LENGTH_SHORT)
-
-            when (it.itemId) {
-                R.id.favorites -> {
-                    //Запускаем фрагмент "избранное"
-                    supportFragmentManager
-                        .beginTransaction()
-                        .replace(R.id.fragment_placeholder, FavoritesFragment())
-                        .addToBackStack(null)
-                        .commit()
-                    true
-                }
-                R.id.watch_later -> {
-                    //Toast.makeText(this, "Посмотреть позже", Toast.LENGTH_SHORT).show()
-                    snackbar.setText(R.string.btn_later)
-                    snackbar.show()
-                    true
-                }
-                R.id.selections -> {
-                    //Toast.makeText(this, "Подборки", Toast.LENGTH_SHORT).show()
-                    snackbar.setText(R.string.btn_compile)
-                    snackbar.show()
-                    true
-                }
-                else -> false
-            }
-        }
     }
 
 }
