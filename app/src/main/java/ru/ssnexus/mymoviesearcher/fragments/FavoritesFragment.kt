@@ -49,18 +49,18 @@ class FavoritesFragment : Fragment() {
     }
 
     fun rv_init(db : List<Film>){
-        if(db == null || db.isEmpty())
-        {
-
-            //Toast.makeText(requireContext(), "Empty list", Toast.LENGTH_SHORT).show()
-            AlertDialog.Builder(requireContext())
-                .setTitle(R.string.is_empty_list)
-                .setPositiveButton(R.string.ok) { _, _ ->
-                    (requireActivity() as MainActivity).onBackPressed()
-                }
-                .show()
-            return
-        }
+//        if(db == null || db.isEmpty())
+//        {
+//
+//            //Toast.makeText(requireContext(), "Empty list", Toast.LENGTH_SHORT).show()
+//            AlertDialog.Builder(requireContext())
+//                .setTitle(R.string.is_empty_list)
+//                .setPositiveButton(R.string.ok) { _, _ ->
+//                    (requireActivity() as MainActivity).onBackPressed()
+//                }
+//                .show()
+//            return
+//        }
         //находим наш RV
         favorites_recycler.apply {
 
