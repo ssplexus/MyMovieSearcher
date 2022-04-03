@@ -12,6 +12,8 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.uiautomator.UiDevice
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.Matcher
 
@@ -75,5 +77,16 @@ class MainActivityTest {
         Thread.sleep(1000)
         onView(withId(R.id.home)).perform(click())
         onView(withId(R.id.home_fragment_root)).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun rotateDevice() {
+        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+        device.setOrientationRight();
+        Thread.sleep(1000)
+        device.setOrientationLeft();
+        Thread.sleep(1000)
+        device.setOrientationNatural();
+        Thread.sleep(1000)
     }
 }
