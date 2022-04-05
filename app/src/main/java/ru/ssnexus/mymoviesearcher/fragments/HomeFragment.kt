@@ -5,11 +5,13 @@ import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.film_item.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import ru.ssnexus.mymoviesearcher.AnimationHelper
 import ru.ssnexus.mymoviesearcher.MainActivity
@@ -50,22 +52,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
-//        val scene = Scene.getSceneForLayout(home_fragment_root, R.layout.merge_home_screen_content, requireContext())
-//
-//        //Создаем анимацию выезда поля поиска сверху
-//        val searchSlide = Slide(Gravity.TOP).addTarget(R.id.search_view)
-//        //Создаем анимацию выезда RV снизу
-//        val recyclerSlide = Slide(Gravity.BOTTOM).addTarget(R.id.main_recycler)
-//        //Создаем экземпляр TransitionSet, который объединит все наши анимации
-//        val customTransition = TransitionSet().apply {
-//            //Устанавливаем время, за которое будет проходить анимация
-//            duration = 500
-//            //Добавляем сами анимации
-//            addTransition(recyclerSlide)
-//            addTransition(searchSlide)
-//        }
-//
-//        TransitionManager.go(scene, customTransition)
 
         val filmsDataBase = (requireActivity() as MainActivity).db.getDB()
 
