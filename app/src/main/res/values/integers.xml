@@ -2,4 +2,5 @@
 <resources>
     <integer name="ang45">45</integer>
     <integer name="ang90">90</integer>
+    <integer name="rating_donut_view_normal_stroke">10</integer>
 </resources>

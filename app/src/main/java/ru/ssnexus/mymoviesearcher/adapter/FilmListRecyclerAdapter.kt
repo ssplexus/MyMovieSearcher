@@ -1,8 +1,10 @@
 package ru.ssnexus.mymoviesearcher.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.film_item.*
 import kotlinx.android.synthetic.main.film_item.view.*
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.model.Film
@@ -44,6 +46,8 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : 
                 holder.itemView.item_container.setOnClickListener {
                     clickListener.click(items[position])
                 }
+                // Анимирование рейтинга
+                holder.itemView.rating_donut.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_animation)
             }
         }
     }
@@ -58,12 +62,6 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : 
         val difResult = DiffUtil.calculateDiff(diff)
         setItems(newList)
         difResult.dispatchUpdatesTo(this)
-//        //Сначала очищаем(если не реализовать DiffUtils)
-//        items.clear()
-//        //Добавляем
-//        items.addAll(list)
-//        //Уведомляем RV, что пришел новый список, и ему нужно заново все "привязывать"
-//        notifyDataSetChanged()
     }
 
     //Интерфейс для обработки кликов
