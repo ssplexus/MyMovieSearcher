@@ -6,16 +6,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.fragments.*
 import ru.ssnexus.mymoviesearcher.model.Film
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var binding: ActivityMainBinding
     val db : MoviesDatabase = MoviesDatabase()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        //Инициализируем объект
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        //Передаем его в метод
+        setContentView(binding.root)
 
         initDB()
         initNavigation()
@@ -63,22 +67,7 @@ class MainActivity : AppCompatActivity() {
 
     fun initNavigation()
     {
-        /*
-        topAppBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.settings -> {
-                    Toast.makeText(this, R.string.btn_settings, Toast.LENGTH_SHORT).show()
-                    true
-                }
-                else -> false
-            }
-        }
-
-        topAppBar.setNavigationOnClickListener {
-            Toast.makeText(this, "Когда-нибудь здесь будет навигация...", Toast.LENGTH_SHORT).show()
-        }*/
-
-        bottom_navigation.setOnNavigationItemSelectedListener {
+        binding.bottomNavigation.setOnNavigationItemSelectedListener {
 
             val snackbar = Snackbar.make(layout_main, "", Snackbar.LENGTH_SHORT)
 

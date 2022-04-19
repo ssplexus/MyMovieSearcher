@@ -81,12 +81,12 @@ class MainActivityTest {
 
     @Test
     fun rotateDevice() {
-        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
-        device.setOrientationRight();
-        Thread.sleep(1000)
-        device.setOrientationLeft();
-        Thread.sleep(1000)
-        device.setOrientationNatural();
-        Thread.sleep(1000)
+//        val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+//        device.setOrientationRight();
+//        Thread.sleep(1000)
+//        device.setOrientationLeft();
+//        Thread.sleep(1000)
+//        device.setOrientationNatural();
+//        Thread.sleep(1000)
     }
 }
