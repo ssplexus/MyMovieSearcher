@@ -1,17 +1,15 @@
 package ru.ssnexus.mymoviesearcher.adapter
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.film_item.view.*
+import ru.ssnexus.mymoviesearcher.databinding.FilmItemBinding
 import ru.ssnexus.mymoviesearcher.model.Film
 
-class FilmViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemView) {
+class FilmViewHolder(val binding: FilmItemBinding) : RecyclerView.ViewHolder(binding.root) {
     //Привязываем View из layout к переменным
-    private val title = itemView.title
-    private val poster = itemView.poster
-    private val description = itemView.description
-    private val ratingDonut = itemView.rating_donut
+    private val title = binding.title
+    private val poster = binding.poster
+    private val description = binding.description
 
     //В этом методе кладем данные из Film в наши View
     fun bind(film: Film) {
@@ -30,6 +28,6 @@ class FilmViewHolder(private val itemView: View) : RecyclerView.ViewHolder(itemV
         //Устанавливаем описание
         description.text = film.description
         //Устанавливаем рэйтинг
-        ratingDonut.setProgress((film.rating * 10).toInt())
+        binding.rating = (film.rating * 10).toInt()
     }
 }

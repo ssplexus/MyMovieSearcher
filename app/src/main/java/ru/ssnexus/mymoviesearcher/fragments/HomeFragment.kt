@@ -1,39 +1,26 @@
 package ru.ssnexus.mymoviesearcher.fragments
 
+import android.app.AlertDialog
 import android.os.Bundle
-import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.film_item.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import ru.ssnexus.mymoviesearcher.AnimationHelper
 import ru.ssnexus.mymoviesearcher.MainActivity
-import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
-import ru.ssnexus.mymoviesearcher.helper.ItemTouchHelperCallback
+import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.model.Film
 import ru.ssnexus.mymoviesearcher.model.decoration.TopSpacingItemDecoration
 import java.util.*
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-
 class HomeFragment : Fragment() {
-    init {
-//        exitTransition = Fade().apply { duration = 800;mode = Fade.MODE_OUT }
-//        reenterTransition = Fade().apply { duration = 800; }
-    }
+
+    private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +33,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,8 +43,8 @@ class HomeFragment : Fragment() {
 
         val filmsDataBase = (requireActivity() as MainActivity).db.getDB()
 
-        search_view.setOnClickListener {
-            search_view.isIconified = false
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
         }
 
         //Подключаем слушателя изменений введенного текста в поиска
@@ -85,13 +73,13 @@ class HomeFragment : Fragment() {
         })
 
         rv_init(filmsDataBase)
-
     }
+
 
     fun rv_init(db : List<Film>){
         if(db == null || db.isEmpty()) return
         //находим наш RV
-        main_recycler.apply {
+        binding.mainRecycler.apply {
 
             filmsAdapter = FilmListRecyclerAdapter(object : FilmListRecyclerAdapter.OnItemClickListener{
                 override fun click(film: Film) {
@@ -107,9 +95,10 @@ class HomeFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
         }
+
+
         //Кладем нашу БД в RV
         filmsAdapter.addItems(db)
-
 
        // val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(filmsAdapter))
         //itemTouchHelper.attachToRecyclerView(main_recycler)
