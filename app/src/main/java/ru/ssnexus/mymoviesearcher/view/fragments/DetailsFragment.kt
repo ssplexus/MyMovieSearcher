@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.fragments
+package ru.ssnexus.mymoviesearcher.view.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
-import ru.ssnexus.mymoviesearcher.model.Film
+import ru.ssnexus.mymoviesearcher.domain.Film
 
 class DetailsFragment : Fragment() {
     private lateinit var binding:FragmentDetailsBinding

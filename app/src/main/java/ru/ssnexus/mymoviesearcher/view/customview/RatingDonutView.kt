@@ -1,9 +1,10 @@
-package ru.ssnexus.mymoviesearcher
+package ru.ssnexus.mymoviesearcher.view.customview
 
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
+import ru.ssnexus.mymoviesearcher.R
 
 class RatingDonutView @JvmOverloads constructor(context: Context, attributeSet: AttributeSet? = null) : View(context, attributeSet) {
     //Овал для рисования сегментов прогресс бара

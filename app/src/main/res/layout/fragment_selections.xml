@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.SelectionsFragment"
+    tools:context=".view.fragments.SelectionsFragment"
     android:visibility="invisible"
     tools:visibility="visible"
     android:background="@drawable/selections_background"

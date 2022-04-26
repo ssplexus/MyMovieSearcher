@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher
+package ru.ssnexus.mymoviesearcher.utils
 
 import android.app.Activity
 import android.view.View

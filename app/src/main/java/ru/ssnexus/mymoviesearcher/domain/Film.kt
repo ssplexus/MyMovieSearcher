@@ -1,10 +1,9 @@
-package ru.ssnexus.mymoviesearcher.model
+package ru.ssnexus.mymoviesearcher.domain
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
-import androidx.databinding.*
 import kotlinx.android.parcel.Parcelize
 import ru.ssnexus.mymoviesearcher.BR
 

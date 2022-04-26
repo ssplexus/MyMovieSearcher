@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.adapter
+package ru.ssnexus.mymoviesearcher.view.rv_adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.film_item.view.*
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.model.Film
-import ru.ssnexus.mymoviesearcher.model.Item
-import ru.ssnexus.mymoviesearcher.model.ItemDiffUtil
+import ru.ssnexus.mymoviesearcher.view.rv_viewholders.FilmViewHolder
+import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.domain.Item
+import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil
 
 //в параметр передаем слушатель, чтобы мы потом могли обрабатывать нажатия из класса Activity
 class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {

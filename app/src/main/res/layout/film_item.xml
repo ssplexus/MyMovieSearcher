@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ru.ssnexus.mymoviesearcher.RatingDonutView
+        <ru.ssnexus.mymoviesearcher.view.customview.RatingDonutView
             android:id="@+id/rating_donut"
             android:layout_width="@dimen/rating_donut_view_normal_width"
             android:layout_height="@dimen/rating_donut_view_normal_height"

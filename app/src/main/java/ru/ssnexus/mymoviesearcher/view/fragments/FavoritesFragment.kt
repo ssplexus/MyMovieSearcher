@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.fragments
+package ru.ssnexus.mymoviesearcher.view.fragments
 
 import android.os.Bundle
 import android.transition.Fade
@@ -6,16 +6,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
-import ru.ssnexus.mymoviesearcher.AnimationHelper
-import ru.ssnexus.mymoviesearcher.MainActivity
-import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
 import ru.ssnexus.mymoviesearcher.databinding.FragmentFavoritesBinding
-import ru.ssnexus.mymoviesearcher.helper.ItemTouchHelperCallback
-import ru.ssnexus.mymoviesearcher.model.Film
-import ru.ssnexus.mymoviesearcher.model.decoration.TopSpacingItemDecoration
+import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
+import ru.ssnexus.mymoviesearcher.utils.ItemTouchHelperCallback
+import ru.ssnexus.mymoviesearcher.view.MainActivity
+import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
+import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
+import ru.ssnexus.mymoviesearcher.viewmodel.FavoritesFragmentViewHolder
 
 
 class FavoritesFragment : Fragment() {
@@ -27,6 +30,20 @@ class FavoritesFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+
+    private val viewModel by lazy {
+        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewHolder::class.java)
+    }
+    private var filmsDataBase = listOf<Film>()
+        //Используем backing field
+        set(value) {
+            //Если придет такое же значение, то мы выходим из метода
+            if (field == value) return
+            //Если пришло другое значение, то кладем его в переменную
+            field = value
+            //Обновляем RV адаптер
+            filmsAdapter.addItems(field)
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +61,14 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rv_init((requireActivity() as MainActivity).db.getFavorites())
+
+        // Инициализируем RecyclerView
+        rv_init()
+
         AnimationHelper.performFragmentCircularRevealAnimation(binding.root, requireActivity(), 2)
     }
 
-    fun rv_init(db : List<Film>){
+    fun rv_init(){
         //находим наш RV
         binding.favoritesRecycler.apply {
 
@@ -66,11 +86,10 @@ class FavoritesFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
         }
-        //Кладем нашу БД в RV
-        filmsAdapter.addItems(db)
+        filmsAdapter.addItems(viewModel.getData())
 
         val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(filmsAdapter))
-        itemTouchHelper.attachToRecyclerView(main_recycler)
+        itemTouchHelper.attachToRecyclerView(binding.favoritesRecycler)
     }
 
 

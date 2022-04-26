@@ -7,7 +7,7 @@
     tools:visibility="visible"
     android:background="@drawable/watchlater_background"
     android:id="@+id/watchlater_fragment_root"
-    tools:context=".fragments.WatchLaterFragment">
+    tools:context=".view.fragments.WatchLaterFragment">
 
 
 </FrameLayout>
