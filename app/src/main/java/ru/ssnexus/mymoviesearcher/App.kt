@@ -2,15 +2,23 @@ package ru.ssnexus.mymoviesearcher
 
 import android.app.Application
 import android.content.res.Configuration
+import ru.ssnexus.mymoviesearcher.data.MainRepository
+import ru.ssnexus.mymoviesearcher.domain.Interactor
 import timber.log.Timber
 
 class App : Application() {
+    lateinit var repo: MainRepository
+    lateinit var interactor: Interactor
     // Этот метод вызывается при старте приложения до того, как будут созданы другие компоненты приложения
     // Этот метод необязательно переопределять, но это самое хорошее место для инициализации глобальных объектов
     override fun onCreate() {
         super.onCreate()
 
         instance = this
+        //Инициализируем репозиторий
+        repo = MainRepository()
+        //Инициализируем интерактор
+        interactor = Interactor(repo)
 
         if(BuildConfig.DEBUG)
         {

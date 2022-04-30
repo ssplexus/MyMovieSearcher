@@ -1,11 +1,12 @@
-package ru.ssnexus.mymoviesearcher.helper
+package ru.ssnexus.mymoviesearcher.utils
 
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import ru.ssnexus.mymoviesearcher.adapter.FilmListRecyclerAdapter
-import ru.ssnexus.mymoviesearcher.model.Item
-import ru.ssnexus.mymoviesearcher.model.ItemDiffUtil
+import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
+import ru.ssnexus.mymoviesearcher.domain.Item
+import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil
 
 class ItemTouchHelperCallback(val adapter : FilmListRecyclerAdapter): ItemTouchHelper.Callback() {
 
@@ -36,7 +37,7 @@ class ItemTouchHelperCallback(val adapter : FilmListRecyclerAdapter): ItemTouchH
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val newList = arrayListOf<Item>()
         newList.addAll(adapter.getItems())
-        newList.removeAt(viewHolder.adapterPosition)
+        (newList.removeAt(viewHolder.adapterPosition) as Film).isInFavorites = false
         val  diff = ItemDiffUtil(adapter.getItems(), newList)
         val difResult = DiffUtil.calculateDiff(diff)
         adapter.setItems(newList)

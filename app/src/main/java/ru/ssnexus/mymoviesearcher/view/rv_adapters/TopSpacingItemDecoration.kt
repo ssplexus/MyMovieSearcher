@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.model.decoration
+package ru.ssnexus.mymoviesearcher.view.rv_adapters
 
 import android.content.res.Resources
 import android.graphics.Rect
