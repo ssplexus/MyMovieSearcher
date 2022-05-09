@@ -10,8 +10,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
+import ru.ssnexus.mymoviesearcher.App
+import ru.ssnexus.mymoviesearcher.data.MainRepository
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.domain.Item
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
@@ -24,6 +27,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
@@ -36,6 +40,7 @@ class HomeFragment : Fragment() {
             field = value
             //Обновляем RV адаптер
             filmsAdapter.addItems(field)
+            App.instance.repo.filmsDataBase = field
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +62,7 @@ class HomeFragment : Fragment() {
         AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
 
         // Инициализируем RecyclerView
-        rv_init()
+        rvInit()
 
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
@@ -90,7 +95,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun rv_init(){
+    fun rvInit(){
         //находим наш RV
         binding.mainRecycler.apply {
 

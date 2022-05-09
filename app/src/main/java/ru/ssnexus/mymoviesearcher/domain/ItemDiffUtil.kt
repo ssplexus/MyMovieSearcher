@@ -1,10 +1,9 @@
 package ru.ssnexus.mymoviesearcher.domain
 
 import androidx.recyclerview.widget.DiffUtil
-import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.domain.Item
 
-class ItemDiffUtil(val oldList: List<Item>, val newList: List<Item>): DiffUtil.Callback() {
+class ItemDiffUtil(val oldList: List<Film>, val newList: List<Item>): DiffUtil.Callback() {
     override fun getOldListSize(): Int {
         return oldList.size
     }
