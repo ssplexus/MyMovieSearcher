@@ -4,5 +4,5 @@ import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.domain.Film
 
 class MainRepository {
-    var filmsDataBase = listOf<Film>()
+    val favoritesFilms = mutableListOf<Film>()
 }
