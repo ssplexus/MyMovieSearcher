@@ -2,26 +2,29 @@ package ru.ssnexus.mymoviesearcher.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.ssnexus.mymoviesearcher.App
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import ru.ssnexus.mymoviesearcher.data.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.utils.Converter
 import timber.log.Timber
 
-class HomeFragmentViewModel : ViewModel() {
+class HomeFragmentViewModel : ViewModel(), KoinComponent {
     //Позиция скролла при переходе между страницами
     var scrollToPosition: Int = 0
     var currentPage : Int = 0
     //Сколько фильмов на странице
     var totalPageResults : Int = 0
 
+    private var currentPageData: List<Film>? = null
+
     private var totalPages : Int = 0
     private val apiCallback : ApiCallback?
 
     val filmsListLiveData = MutableLiveData<List<Film>>()
     //Инициализируем интерактор
-    private var interactor: Interactor = App.instance.interactor
+    private val interactor: Interactor by inject()
 
     init {
         apiCallback = object : ApiCallback {
@@ -32,18 +35,10 @@ class HomeFragmentViewModel : ViewModel() {
                     currentPage = resultsDto.page
                     totalPageResults = resultsDto.tmdbFilms.size
                     totalPages = resultsDto.totalPages
-                    var films = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
+                    currentPageData = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
 
-                    // сверямеся со списком избранных если фильм в списке актуализируем признак isInFavorites
-                    var favFilms = interactor.repo.favoritesFilms
-                    if(favFilms.isNotEmpty())
-                        for(i in 0 until films.size) {
-                            for(favFilm in favFilms)
-                            {
-                                if(films[i].id == favFilm.id) films[i].isInFavorites = true
-                            }
-                        }
-                    filmsListLiveData.postValue(films)
+                    updatePageData()
+
                 }
                 else
                 {
@@ -83,6 +78,20 @@ class HomeFragmentViewModel : ViewModel() {
             apiCallback?.let { interactor.getFilmsFromApi(currentPage - 1, it) }
             scrollToPosition = 19
         }
+    }
+
+    fun updatePageData() {
+        if(currentPageData == null) return
+        // сверямеся со списком избранных если фильм в списке актуализируем признак isInFavorites
+        var favFilms = interactor.repo.favoritesFilms
+        currentPageData?.forEach {film->
+            film.isInFavorites = false
+            if(favFilms.isNotEmpty())
+                favFilms.forEach {favFilm->
+                    if(film.id == favFilm.id) film.isInFavorites = true
+            }
+        }
+        filmsListLiveData.postValue(currentPageData)
     }
 
     interface ApiCallback {

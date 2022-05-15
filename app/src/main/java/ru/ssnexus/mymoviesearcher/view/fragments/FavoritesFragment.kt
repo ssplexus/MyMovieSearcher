@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home.*
 import ru.ssnexus.mymoviesearcher.databinding.FragmentFavoritesBinding
 import ru.ssnexus.mymoviesearcher.domain.Film
@@ -86,11 +87,26 @@ class FavoritesFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
         }
-        filmsAdapter.addItems(viewModel.getData())
 
-        val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(filmsAdapter))
+        //Пордписываемся на данные модели
+        viewModel.favFilmsListLiveData.observe(viewLifecycleOwner,
+            {filmsAdapter.addItems(it)})
+
+        viewModel.getData()
+
+        val itemTouchHelper = ItemTouchHelper( object: ItemTouchHelperCallback(filmsAdapter)
+        {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
+            {
+                super.onSwiped(viewHolder, direction)
+                viewModel.removeFromFavorites(this.lastSwipedItem as Film)
+            }
+
+        })
+
         itemTouchHelper.attachToRecyclerView(binding.favoritesRecycler)
     }
+
 
 
 }
