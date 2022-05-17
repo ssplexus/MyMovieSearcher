@@ -63,12 +63,12 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Инициализируем RecyclerView
-        rv_init()
+        rvInit()
 
         AnimationHelper.performFragmentCircularRevealAnimation(binding.root, requireActivity(), 2)
     }
 
-    fun rv_init(){
+    fun rvInit(){
         //находим наш RV
         binding.favoritesRecycler.apply {
 

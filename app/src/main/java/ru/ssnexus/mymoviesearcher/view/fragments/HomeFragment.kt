@@ -5,25 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home.*
+import ru.ssnexus.mymoviesearcher.App
+import ru.ssnexus.mymoviesearcher.data.MainRepository
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.domain.Item
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
+import timber.log.Timber
 import java.util.*
+import kotlin.math.roundToInt
 
 
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
     }
@@ -57,7 +65,7 @@ class HomeFragment : Fragment() {
         AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
 
         // Инициализируем RecyclerView
-        rv_init()
+        rvInit()
 
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
@@ -90,7 +98,8 @@ class HomeFragment : Fragment() {
     }
 
 
-    fun rv_init(){
+    fun rvInit(){
+
         //находим наш RV
         binding.mainRecycler.apply {
 
@@ -99,7 +108,6 @@ class HomeFragment : Fragment() {
                     (requireActivity() as MainActivity).launchDetailsFragment(film)
                 }
             })
-
             //Присваиваем адаптер
             adapter = filmsAdapter
             //Присвои layoutmanager
@@ -108,7 +116,40 @@ class HomeFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
 
-            viewModel.filmsListLiveData.observe(viewLifecycleOwner, Observer<List<Film>>{filmsDataBase = it})
+            //Скролл слушатель для пагинации
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val lManager = recyclerView.layoutManager
+                    if (lManager is LinearLayoutManager)
+                    {
+                        // в зависимости от направления скролла выбирается следующая или предыдущая
+                        // страница для загрузки данных
+                        if (dy > 0) {
+                            if(lManager.findLastCompletelyVisibleItemPosition() == viewModel.totalPageResults - 1) viewModel.getNextPageData()
+                        } else if (dy < 0){
+                            if(lManager.findFirstVisibleItemPosition() == 0) viewModel.getPrevPageData()
+                            }
+                    }
+                }
+            })
+
+            viewModel.filmsListLiveData.observe(viewLifecycleOwner,
+                Observer<List<Film>>{filmsDataBase = it;
+                    // Скролл к последнему элементу предыдущей страницы
+                    if (viewModel.scrollToPosition > 0)
+                    {
+                        scrollToPosition(viewModel.scrollToPosition)
+                        viewModel.scrollToPosition = 0
+                    }
+                })
+
+
         }
     }
 

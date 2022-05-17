@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.R
+import ru.ssnexus.mymoviesearcher.data.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
 import ru.ssnexus.mymoviesearcher.domain.Film
 
@@ -41,7 +44,11 @@ class DetailsFragment : Fragment() {
         //Устанавливаем заголовок
         binding.detailsToolbar.title = film.title
         //Устанавливаем картинку
-        binding.detailsPoster.setImageResource(film.poster)
+        Glide.with(this)
+            .load(ApiConstants.IMAGES_URL + "w780" + film.poster)
+            .centerCrop()
+            .into(binding.detailsPoster)
+
         //Устанавливаем описание
         binding.detailsDescription.text = film.description
 
@@ -54,9 +61,11 @@ class DetailsFragment : Fragment() {
             if (!film.isInFavorites) {
                 binding.detailsFabFav.setImageResource(R.drawable.ic_baseline_favorite_24)
                 film.isInFavorites = true
+                App.instance.interactor.addToFavorites(film) //TODO Реализовать через viewModel
             } else {
                 binding.detailsFabFav.setImageResource(R.drawable.ic_baseline_favorite_border_24)
                 film.isInFavorites = false
+                App.instance.interactor.removeFromFavorites(film) //TODO Реализовать через viewModel
             }
         }
 
