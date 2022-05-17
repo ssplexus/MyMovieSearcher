@@ -148,7 +148,7 @@ class HomeFragment : Fragment() {
                         viewModel.scrollToPosition = 0
                     }
                 })
-
+            viewModel.updatePageData()
 
         }
     }

@@ -8,7 +8,9 @@ import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
 import ru.ssnexus.mymoviesearcher.domain.Item
 import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil
 
-class ItemTouchHelperCallback(val adapter : FilmListRecyclerAdapter): ItemTouchHelper.Callback() {
+open class ItemTouchHelperCallback(val adapter : FilmListRecyclerAdapter): ItemTouchHelper.Callback() {
+
+    lateinit var lastSwipedItem: Item
 
     override fun isLongPressDragEnabled(): Boolean {
         return false
@@ -37,7 +39,7 @@ class ItemTouchHelperCallback(val adapter : FilmListRecyclerAdapter): ItemTouchH
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val newList = arrayListOf<Item>()
         newList.addAll(adapter.getItems())
-        (newList.removeAt(viewHolder.adapterPosition) as Film).isInFavorites = false
+        lastSwipedItem = newList.removeAt(viewHolder.adapterPosition)
         val  diff = ItemDiffUtil(adapter.getItems(), newList)
         val difResult = DiffUtil.calculateDiff(diff)
         adapter.setItems(newList)
