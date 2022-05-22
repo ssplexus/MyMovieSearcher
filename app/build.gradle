@@ -7,6 +7,7 @@ plugins {
 
 android {
     compileSdk 30
+    buildToolsVersion "30.0.1"
 
     defaultConfig {
         applicationId "ru.ssnexus.mymoviesearcher"
@@ -66,4 +67,8 @@ dependencies {
 
     //Koin
     implementation "org.koin:koin-android:2.0.1"
+
+    //Dagger
+    implementation 'com.google.dagger:dagger:2.28'
+    kapt 'com.google.dagger:dagger-compiler:2.28'
 }

@@ -18,5 +18,7 @@
     <string name="ok">Ok</string>
     <string name="parcel_item_film">film</string>
     <string name="is_empty_list">Your list is empty</string>
+    <string name="poster_small">w342</string>
+    <string name="poster_big">w780</string>
 
 </resources>

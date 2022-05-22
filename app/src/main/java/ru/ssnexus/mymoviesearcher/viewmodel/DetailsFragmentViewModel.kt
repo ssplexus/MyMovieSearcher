@@ -1,16 +1,20 @@
 package ru.ssnexus.mymoviesearcher.viewmodel
 
 import androidx.lifecycle.ViewModel
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
+import javax.inject.Inject
 
-class DetailsFragmentViewModel:ViewModel(), KoinComponent {
+class DetailsFragmentViewModel:ViewModel() {
 
     //Инициализируем интерактор
-    private val interactor: Interactor by inject()
+    @Inject
+    lateinit var interactor: Interactor
 
+    init {
+        App.instance.dagger.inject(this)
+    }
     fun addToFavorites(film : Film)
     {
         interactor.addToFavorites(film)

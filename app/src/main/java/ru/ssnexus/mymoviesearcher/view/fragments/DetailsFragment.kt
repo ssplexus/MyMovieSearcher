@@ -9,13 +9,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.data.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
 import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
-import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
 
 class DetailsFragment : Fragment() {
@@ -50,13 +48,14 @@ class DetailsFragment : Fragment() {
         //Получаем наш фильм из переданного бандла
         val film = arguments?.get(R.string.parcel_item_film.toString()) as Film
 
+
         viewModel.checkInFavorites(film)
 
         //Устанавливаем заголовок
         binding.detailsToolbar.title = film.title
         //Устанавливаем картинку
         Glide.with(this)
-            .load(ApiConstants.IMAGES_URL + "w780" + film.poster)
+            .load(ApiConstants.IMAGES_URL + resources.getString(R.string.poster_big) + film.poster)
             .centerCrop()
             .into(binding.detailsPoster)
 

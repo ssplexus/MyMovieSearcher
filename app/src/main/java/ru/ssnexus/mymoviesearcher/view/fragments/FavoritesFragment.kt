@@ -6,12 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_home.*
 import ru.ssnexus.mymoviesearcher.databinding.FragmentFavoritesBinding
 import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
@@ -19,7 +17,7 @@ import ru.ssnexus.mymoviesearcher.utils.ItemTouchHelperCallback
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
-import ru.ssnexus.mymoviesearcher.viewmodel.FavoritesFragmentViewHolder
+import ru.ssnexus.mymoviesearcher.viewmodel.FavoritesFragmentViewModel
 
 
 class FavoritesFragment : Fragment() {
@@ -33,7 +31,7 @@ class FavoritesFragment : Fragment() {
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
     private val viewModel by lazy {
-        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewHolder::class.java)
+        ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
     }
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
