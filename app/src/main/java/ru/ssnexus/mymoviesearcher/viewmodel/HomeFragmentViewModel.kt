@@ -2,15 +2,15 @@ package ru.ssnexus.mymoviesearcher.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.data.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.utils.Converter
 import timber.log.Timber
+import javax.inject.Inject
 
-class HomeFragmentViewModel : ViewModel(), KoinComponent {
+class HomeFragmentViewModel : ViewModel(){
     //Позиция скролла при переходе между страницами
     var scrollToPosition: Int = 0
     var currentPage : Int = 0
@@ -23,10 +23,13 @@ class HomeFragmentViewModel : ViewModel(), KoinComponent {
     private val apiCallback : ApiCallback?
 
     val filmsListLiveData = MutableLiveData<List<Film>>()
+
     //Инициализируем интерактор
-    private val interactor: Interactor by inject()
+    @Inject
+    lateinit var interactor: Interactor
 
     init {
+        App.instance.dagger.inject(this)
         apiCallback = object : ApiCallback {
             override fun onSuccess(resultsDto: TmdbResultsDto?) {
 

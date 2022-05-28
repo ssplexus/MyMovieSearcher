@@ -2,14 +2,13 @@ package ru.ssnexus.mymoviesearcher
 
 import android.app.Application
 import android.content.res.Configuration
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
-import ru.ssnexus.mymoviesearcher.di.DI
+import ru.ssnexus.mymoviesearcher.di.AppComponent
+import ru.ssnexus.mymoviesearcher.di.DaggerAppComponent
 import timber.log.Timber
 
 class App : Application() {
 
+    lateinit var dagger: AppComponent
     // Этот метод вызывается при старте приложения до того, как будут созданы другие компоненты приложения
     // Этот метод необязательно переопределять, но это самое хорошее место для инициализации глобальных объектов
     override fun onCreate() {
@@ -20,14 +19,9 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        startKoin {
-            //Прикрепляем контекст
-            androidContext(this@App)
-            //(Опционально) подключаем зависимость
-            androidLogger()
-            //Инициализируем модули
-            modules(listOf(DI.mainModule))
-        }
+        instance = this
+        //Создаем компонент
+        dagger = DaggerAppComponent.create()
     }
 
     // Вызывается при изменении конфигурации, например, поворот
@@ -41,5 +35,10 @@ class App : Application() {
     // Переопределять необязательно
     override fun onLowMemory() {
         super.onLowMemory()
+    }
+
+    companion object {
+        lateinit var instance: App
+            private set
     }
 }
