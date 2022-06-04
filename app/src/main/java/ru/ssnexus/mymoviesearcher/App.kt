@@ -4,6 +4,9 @@ import android.app.Application
 import android.content.res.Configuration
 import ru.ssnexus.mymoviesearcher.di.AppComponent
 import ru.ssnexus.mymoviesearcher.di.DaggerAppComponent
+import ru.ssnexus.mymoviesearcher.di.modules.DatabaseModule
+import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
+import ru.ssnexus.mymoviesearcher.di.modules.RemoteModule
 import timber.log.Timber
 
 class App : Application() {
@@ -19,9 +22,16 @@ class App : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
+
         instance = this
         //Создаем компонент
-        dagger = DaggerAppComponent.create()
+        //dagger = DaggerAppComponent.create()
+
+        dagger = DaggerAppComponent.builder()
+            .remoteModule(RemoteModule())
+            .databaseModule(DatabaseModule())
+            .domainModule(DomainModule(this))
+            .build()
     }
 
     // Вызывается при изменении конфигурации, например, поворот

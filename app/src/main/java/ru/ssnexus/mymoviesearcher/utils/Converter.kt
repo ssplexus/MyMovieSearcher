@@ -1,6 +1,6 @@
 package ru.ssnexus.mymoviesearcher.utils
 
-import ru.ssnexus.mymoviesearcher.data.TmdbFilm
+import ru.ssnexus.mymoviesearcher.data.entity.TmdbFilm
 import ru.ssnexus.mymoviesearcher.domain.Film
 
 object Converter {

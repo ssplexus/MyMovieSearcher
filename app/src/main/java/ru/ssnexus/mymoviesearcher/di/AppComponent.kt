@@ -7,6 +7,7 @@ import ru.ssnexus.mymoviesearcher.di.modules.RemoteModule
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
 import ru.ssnexus.mymoviesearcher.viewmodel.FavoritesFragmentViewModel
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
+import ru.ssnexus.mymoviesearcher.viewmodel.SettingsFragmentViewModel
 import javax.inject.Singleton
 
 @Singleton
@@ -23,4 +24,5 @@ interface AppComponent {
     fun inject(homeFragmentViewModel: HomeFragmentViewModel)
     fun inject(favoritesFragmentViewModel: FavoritesFragmentViewModel)
     fun inject(detailsFragmentViewModel: DetailsFragmentViewModel)
+    fun inject(settingsFragmentViewModel: SettingsFragmentViewModel)
 }

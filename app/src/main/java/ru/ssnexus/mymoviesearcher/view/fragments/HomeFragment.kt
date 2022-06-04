@@ -1,10 +1,9 @@
 package ru.ssnexus.mymoviesearcher.view.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -12,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.koin.android.ext.android.bind
 import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.data.MainRepository
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
@@ -46,6 +46,8 @@ class HomeFragment : Fragment() {
             filmsAdapter.addItems(field)
         }
 
+    private var direction : Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -65,9 +67,52 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
 
+        initSearchView()
+        initPullToRefresh()
         // Инициализируем RecyclerView
-        rvInit()
+        initRecycler()
+    }
 
+
+    private fun initPullToRefresh() {
+
+        //Делаем refresh на swipe up
+            binding.mainRecycler.setOnTouchListener(object: View.OnTouchListener {
+                override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
+                    if (p1?.action == android.view.MotionEvent.ACTION_UP) {
+                        Timber.d("Swipe up!")
+                        if(binding.mainRecycler.isEmpty()) return false
+                        val lManager = binding.mainRecycler.layoutManager
+                        if (lManager is LinearLayoutManager)
+                        {
+                            if(lManager.findLastCompletelyVisibleItemPosition() == viewModel.totalPageResults - 1)
+                            {
+                                binding.pullToRefresh.isRefreshing = true
+
+                                //Делаем новый запрос фильмов на сервер
+                                viewModel.getFilms(1)
+                                //Убираем крутящиеся колечко
+                               binding.pullToRefresh.isRefreshing = false
+                            }
+
+                        }
+                    }
+                    return false
+                }
+            })
+
+            //Вешаем слушатель, чтобы вызвался pull to refresh
+            binding.pullToRefresh.setOnRefreshListener {
+                // filmsAdapter.clear()
+                //Делаем новый запрос фильмов на сервер
+                viewModel.getFilms(-1)
+                //Убираем крутящиеся колечко
+                binding.pullToRefresh.isRefreshing = false
+            }
+        }
+
+
+    private fun initSearchView() {
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
         }
@@ -99,8 +144,7 @@ class HomeFragment : Fragment() {
         })
     }
 
-
-    fun rvInit(){
+    private fun initRecycler(){
 
         //находим наш RV
         binding.mainRecycler.apply {
@@ -118,41 +162,17 @@ class HomeFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
 
-            //Скролл слушатель для пагинации
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                }
-
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-
-                    val lManager = recyclerView.layoutManager
-                    if (lManager is LinearLayoutManager)
-                    {
-                        // в зависимости от направления скролла выбирается следующая или предыдущая
-                        // страница для загрузки данных
-                        if (dy > 0) {
-                            if(lManager.findLastCompletelyVisibleItemPosition() == viewModel.totalPageResults - 1) viewModel.getNextPageData()
-                        } else if (dy < 0){
-                            if(lManager.findFirstVisibleItemPosition() == 0) viewModel.getPrevPageData()
-                            }
-                    }
-                }
-            })
-
             viewModel.filmsListLiveData.observe(viewLifecycleOwner,
-                Observer<List<Film>>{filmsDataBase = it;
+                Observer<List<Film>>{
+                    filmsDataBase = it;
                     // Скролл к последнему элементу предыдущей страницы
+                    Timber.d("Scroll to position " + viewModel.scrollToPosition)
                     if (viewModel.scrollToPosition > 0)
                     {
                         scrollToPosition(viewModel.scrollToPosition)
                         viewModel.scrollToPosition = 0
                     }
                 })
-            viewModel.updatePageData()
-
         }
     }
-
 }

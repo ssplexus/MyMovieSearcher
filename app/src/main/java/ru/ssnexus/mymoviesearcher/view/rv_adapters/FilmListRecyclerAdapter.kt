@@ -25,6 +25,11 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : 
         return items
     }
 
+    fun clear()
+    {
+        items.clear()
+    }
+
     //Этот метод нужно переопределить на возврат количества элементов в списке RV
     override fun getItemCount() = items.size
 

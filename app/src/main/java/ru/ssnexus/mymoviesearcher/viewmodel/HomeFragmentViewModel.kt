@@ -3,7 +3,7 @@ package ru.ssnexus.mymoviesearcher.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
-import ru.ssnexus.mymoviesearcher.data.TmdbResultsDto
+import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.domain.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.utils.Converter
@@ -16,6 +16,8 @@ class HomeFragmentViewModel : ViewModel(){
     var currentPage : Int = 0
     //Сколько фильмов на странице
     var totalPageResults : Int = 0
+
+    var currentCategory : String = ""
 
     private var currentPageData: List<Film>? = null
 
@@ -41,7 +43,6 @@ class HomeFragmentViewModel : ViewModel(){
                     currentPageData = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
 
                     updatePageData()
-
                 }
                 else
                 {
@@ -50,7 +51,6 @@ class HomeFragmentViewModel : ViewModel(){
                     totalPageResults = 0
                     totalPages = 0
                 }
-
             }
 
             override fun onFailure() {
@@ -58,29 +58,29 @@ class HomeFragmentViewModel : ViewModel(){
             }
         }
 
-        //Возвращаемся на текущую страницу
-        if(interactor.getLastSelectedPage() == 0) interactor.getFilmsFromApi(1 , apiCallback)
-        else{
-            currentPage = interactor.getLastSelectedPage()
-            interactor.lastSelectedPageReset()
-            interactor.getFilmsFromApi(currentPage , apiCallback)
+        getFilms(0)
+    }
+
+    fun getFilms(direction : Int) {
+        if (apiCallback != null) {
+            interactor.getFilmsFromApi(getPage(direction), apiCallback)
         }
     }
 
-    //Получить данные следующей страницы
-    fun getNextPageData(){
-        if(currentPage + 1 in 2..totalPages) {
-            apiCallback?.let { interactor.getFilmsFromApi(currentPage + 1, it) }
-            scrollToPosition = 0;
+    fun getPage(direction: Int) : Int {
+        var page : Int = currentPage + 1 * direction
+        //Если поменялась категория то начинаем с первой страницы
+        if(!currentCategory.equals(interactor.getDefaultCategoryFromPreferences())) {
+            currentCategory = interactor.getDefaultCategoryFromPreferences()
+            page = 1
         }
-    }
+        if(page !in 1..totalPages) page = 1
 
-    //Получить данные предыдущей страницы
-    fun getPrevPageData(){
-        if(currentPage - 1 in 1 until totalPages) {
-            apiCallback?.let { interactor.getFilmsFromApi(currentPage - 1, it) }
-            scrollToPosition = 19
-        }
+        Timber.d("Direction " + direction)
+        if(direction >= 0 ) scrollToPosition = 0
+        else if (currentPage > 1) scrollToPosition = totalPageResults - 1
+
+        return page
     }
 
     fun updatePageData() {
