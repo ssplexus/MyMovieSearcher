@@ -6,6 +6,7 @@ import retrofit2.Response
 import ru.ssnexus.mymoviesearcher.data.*
 import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.data.preferences.PreferenceProvider
+import ru.ssnexus.mymoviesearcher.utils.Converter
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
 
@@ -14,14 +15,13 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
     //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
     //и страницу, которую нужно загрузить (это для пагинации)
     fun getFilmsFromApi(page: Int, callback: HomeFragmentViewModel.ApiCallback) {
-        //Исколючить множественный вызов одной и той же страницы
-       // if(page == lastPage) return
-        //lastPage = page
+        Timber.d("Get Films From API")
         retrofitService.getFilms(getDefaultCategoryFromPreferences(), API.KEY, "ru-RU", page).enqueue(object : Callback<TmdbResultsDto> {
             override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
                 //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
                 Timber.d("Get Films Success")
                 callback.onSuccess(response.body())
+
             }
 
             override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
@@ -32,11 +32,7 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
         })
     }
 
-    fun lastSelectedPageReset(){
-        lastPage = 0
-    }
-
-    fun getLastSelectedPage() = lastPage
+    fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
 
     fun getFavorites() : List<Film>
     {

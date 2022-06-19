@@ -42,6 +42,11 @@ class HomeFragmentViewModel : ViewModel(){
                     totalPages = resultsDto.totalPages
                     currentPageData = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
 
+                    //Кладем фильмы в бд
+                    currentPageData?.forEach {
+                        interactor.repo.putToDb(film = it)
+                    }
+
                     updatePageData()
                 }
                 else
@@ -54,7 +59,8 @@ class HomeFragmentViewModel : ViewModel(){
             }
 
             override fun onFailure() {
-                Timber.d("Get films error!")
+                Timber.d("Get films error! " + interactor.getFilmsFromDB().size)
+                filmsListLiveData.postValue(interactor.getFilmsFromDB())
             }
         }
 
