@@ -4,14 +4,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import ru.ssnexus.mymoviesearcher.data.*
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.data.preferences.PreferenceProvider
-import ru.ssnexus.mymoviesearcher.utils.Converter
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
 
 class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {
-    private var lastPage:Int = 0
+
     //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
     //и страницу, которую нужно загрузить (это для пагинации)
     fun getFilmsFromApi(page: Int, callback: HomeFragmentViewModel.ApiCallback) {
@@ -39,12 +39,25 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
         return repo.favoritesFilms
     }
 
+    fun updateFavorites(srcList: List<Film>)
+    {
+        // сверямеся со списком избранных если фильм в списке актуализируем признак isInFavorites
+        var favFilms = repo.favoritesFilms
+        srcList.forEach {film->
+            film.isInFavorites = false
+            if(favFilms.isNotEmpty())
+                favFilms.forEach {favFilm->
+                    if(film.id == favFilm.id) film.isInFavorites = true
+                }
+        }
+    }
+
     fun addToFavorites (film : Film){
         if(!repo.favoritesFilms.contains(film))
             repo.favoritesFilms.add(film)
     }
 
-    fun removeFromFavorites (film:Film)
+    fun removeFromFavorites (film: Film)
     {
         var removeIdx:Int = repo.favoritesFilms.indexOf(film)
         if(removeIdx >= 0) repo.favoritesFilms.removeAt(removeIdx)

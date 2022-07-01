@@ -1,7 +1,7 @@
 package ru.ssnexus.mymoviesearcher.utils
 
 import ru.ssnexus.mymoviesearcher.data.entity.TmdbFilm
-import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 
 object Converter {
     fun convertApiListToDtoList(list: List<TmdbFilm>?): List<Film> {
@@ -11,7 +11,7 @@ object Converter {
                 Film(
                 id = it.id,
                 title = it.title,
-                poster = it.posterPath,
+                poster = it?.posterPath,
                 description = it.overview,
                 rating = it.voteAverage,
                 isInFavorites = false

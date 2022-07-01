@@ -12,9 +12,8 @@ import com.bumptech.glide.Glide
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.data.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
-import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
-import timber.log.Timber
 
 class DetailsFragment : Fragment() {
     private lateinit var binding:FragmentDetailsBinding

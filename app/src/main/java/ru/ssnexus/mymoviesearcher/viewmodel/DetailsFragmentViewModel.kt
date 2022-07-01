@@ -2,7 +2,7 @@ package ru.ssnexus.mymoviesearcher.viewmodel
 
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
-import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import javax.inject.Inject
 

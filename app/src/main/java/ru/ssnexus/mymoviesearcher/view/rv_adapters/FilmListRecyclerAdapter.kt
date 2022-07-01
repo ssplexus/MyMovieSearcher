@@ -1,4 +1,5 @@
 package ru.ssnexus.mymoviesearcher.view.rv_adapters
+import android.R.attr.data
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -7,17 +8,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.film_item.view.*
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.view.rv_viewholders.FilmViewHolder
-import ru.ssnexus.mymoviesearcher.domain.Film
-import ru.ssnexus.mymoviesearcher.domain.Item
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil
+import ru.ssnexus.mymoviesearcher.view.rv_viewholders.FilmViewHolder
+
 
 //в параметр передаем слушатель, чтобы мы потом могли обрабатывать нажатия из класса Activity
 class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     //Здесь у нас хранится список элементов для RV
     private var items = mutableListOf<Film>()
 
-    fun setItems(items: List<Item>) {
+    fun setItems(items: List<Film>) {
         this.items = items as MutableList<Film>
     }
 
@@ -63,14 +64,23 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : 
 
 
     //Метод для добавления объектов в наш список
-    fun addItems(list: List<Item>) {
+    fun addItems(list: List<Film>) {
 
-        val newList = arrayListOf<Item>()
+        val newList = arrayListOf<Film>()
+        //newList.addAll(getItems() + list)
         newList.addAll(list)
-        val  diff = ItemDiffUtil(getItems(), newList)
-        val difResult = DiffUtil.calculateDiff(diff)
         setItems(newList)
-        difResult.dispatchUpdatesTo(this)
+        notifyDataSetChanged()
+//        val  diff = ItemDiffUtil(getItems(), newList)
+//        val difResult = DiffUtil.calculateDiff(diff)
+//        setItems(newList)
+//        difResult.dispatchUpdatesTo(this)
+    }
+
+    fun clearRV(){
+        val size: Int = items.size
+        items.clear()
+        notifyItemRangeRemoved(0, size)
     }
 
     //Интерфейс для обработки кликов

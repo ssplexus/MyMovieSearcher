@@ -21,17 +21,15 @@ class App : Application() {
         {
             Timber.plant(Timber.DebugTree())
         }
-
-
         instance = this
-        //Создаем компонент
-        //dagger = DaggerAppComponent.create()
 
+        //Создаем компонент
         dagger = DaggerAppComponent.builder()
             .remoteModule(RemoteModule())
             .databaseModule(DatabaseModule())
             .domainModule(DomainModule(this))
             .build()
+
     }
 
     // Вызывается при изменении конфигурации, например, поворот

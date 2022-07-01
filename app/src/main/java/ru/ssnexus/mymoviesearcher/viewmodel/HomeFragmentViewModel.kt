@@ -4,15 +4,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
-import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.utils.Converter
 import timber.log.Timber
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class HomeFragmentViewModel : ViewModel(){
-    //Позиция скролла при переходе между страницами
-    var scrollToPosition: Int = 0
+
+    var isRefresh : Boolean = false
     var currentPage : Int = 0
     //Сколько фильмов на странице
     var totalPageResults : Int = 0
@@ -42,11 +43,6 @@ class HomeFragmentViewModel : ViewModel(){
                     totalPages = resultsDto.totalPages
                     currentPageData = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
 
-                    //Кладем фильмы в бд
-                    currentPageData?.forEach {
-                        interactor.repo.putToDb(film = it)
-                    }
-
                     updatePageData()
                 }
                 else
@@ -60,47 +56,66 @@ class HomeFragmentViewModel : ViewModel(){
 
             override fun onFailure() {
                 Timber.d("Get films error! " + interactor.getFilmsFromDB().size)
-                filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                Executors.newSingleThreadExecutor().execute {
+                    filmsListLiveData.postValue(interactor.getFilmsFromDB())
+                }
             }
         }
-
-        getFilms(0)
+        currentCategory = interactor.getDefaultCategoryFromPreferences()
     }
 
-    fun getFilms(direction : Int) {
+    fun updateFilms() {
         if (apiCallback != null) {
-            interactor.getFilmsFromApi(getPage(direction), apiCallback)
+                interactor.getFilmsFromApi(1, apiCallback)
         }
     }
 
-    fun getPage(direction: Int) : Int {
-        var page : Int = currentPage + 1 * direction
-        //Если поменялась категория то начинаем с первой страницы
-        if(!currentCategory.equals(interactor.getDefaultCategoryFromPreferences())) {
-            currentCategory = interactor.getDefaultCategoryFromPreferences()
-            page = 1
+    fun getFilms() {
+        if (apiCallback != null) {
+            interactor.getFilmsFromApi(getPage(), apiCallback)
         }
+    }
+
+    fun getPage() : Int {
+        var page : Int = currentPage + 1
         if(page !in 1..totalPages) page = 1
-
-        Timber.d("Direction " + direction)
-        if(direction >= 0 ) scrollToPosition = 0
-        else if (currentPage > 1) scrollToPosition = totalPageResults - 1
-
         return page
     }
 
-    fun updatePageData() {
-        if(currentPageData == null) return
-        // сверямеся со списком избранных если фильм в списке актуализируем признак isInFavorites
-        var favFilms = interactor.repo.favoritesFilms
-        currentPageData?.forEach {film->
-            film.isInFavorites = false
-            if(favFilms.isNotEmpty())
-                favFilms.forEach {favFilm->
-                    if(film.id == favFilm.id) film.isInFavorites = true
+    fun setCachedData() {
+        Executors.newSingleThreadExecutor().execute {
+            val cache = interactor.getFilmsFromDB()
+            if (!cache.isEmpty()) {
+                isRefresh = false
+                interactor.updateFavorites(cache)
+                filmsListLiveData.postValue(cache)
+            }
+            else {
+                isRefresh = true
+                updateFilms()
             }
         }
-        filmsListLiveData.postValue(currentPageData)
+    }
+
+    fun clearCache()
+    {
+        Executors.newSingleThreadExecutor().execute {
+            interactor.repo.clearCache()
+        }
+    }
+
+    fun updatePageData() {
+        Executors.newSingleThreadExecutor().execute {
+            //Кладем фильмы в бд
+            currentPageData?.let {
+                interactor.repo.putToDb(it)
+            }
+            val cache = mutableListOf<Film>()
+            cache.addAll(interactor.repo.getAllFromDB())
+
+            interactor.updateFavorites(cache)
+            filmsListLiveData.postValue(cache)
+        }
     }
 
     interface ApiCallback {

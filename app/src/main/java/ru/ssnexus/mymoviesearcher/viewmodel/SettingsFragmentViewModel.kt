@@ -4,6 +4,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.domain.Interactor
+import timber.log.Timber
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class SettingsFragmentViewModel : ViewModel() {
@@ -23,7 +25,20 @@ class SettingsFragmentViewModel : ViewModel() {
         categoryPropertyLifeData.value = interactor.getDefaultCategoryFromPreferences()
     }
 
+    private fun getCurrentProperty(): String
+    {
+        return interactor.getDefaultCategoryFromPreferences()
+    }
+
+    fun clearCache()
+    {
+        Executors.newSingleThreadExecutor().execute {
+            interactor.repo.clearCache()
+        }
+    }
+
     fun putCategoryProperty(category: String) {
+        if(getCurrentProperty() != category) clearCache()
         //Сохраняем в настройки
         interactor.saveDefaultCategoryToPreferences(category)
         //И сразу забираем, чтобы сохранить состояние в модели
