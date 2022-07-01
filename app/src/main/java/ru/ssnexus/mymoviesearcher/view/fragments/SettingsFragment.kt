@@ -32,6 +32,7 @@ class SettingsFragment : Fragment() {
         //Подключаем анимации и передаем номер позиции у кнопки в нижнем меню
         AnimationHelper.performFragmentCircularRevealAnimation(settings_fragment_root, requireActivity(), 5)
         //Слушаем, какой у нас сейчас выбран вариант в настройках
+
         viewModel.categoryPropertyLifeData.observe(viewLifecycleOwner, Observer<String> {
             when(it) {
                 POPULAR_CATEGORY -> binding.radioGroup.check(R.id.radio_popular)

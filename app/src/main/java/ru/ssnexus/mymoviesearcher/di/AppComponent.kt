@@ -4,6 +4,7 @@ import dagger.Component
 import ru.ssnexus.mymoviesearcher.di.modules.DatabaseModule
 import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
 import ru.ssnexus.mymoviesearcher.di.modules.RemoteModule
+import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
 import ru.ssnexus.mymoviesearcher.viewmodel.FavoritesFragmentViewModel
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
@@ -25,4 +26,5 @@ interface AppComponent {
     fun inject(favoritesFragmentViewModel: FavoritesFragmentViewModel)
     fun inject(detailsFragmentViewModel: DetailsFragmentViewModel)
     fun inject(settingsFragmentViewModel: SettingsFragmentViewModel)
+    fun inject(mainActivity: MainActivity)
 }

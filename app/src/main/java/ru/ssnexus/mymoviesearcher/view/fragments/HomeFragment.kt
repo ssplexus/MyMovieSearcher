@@ -4,19 +4,13 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isEmpty
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.koin.android.ext.android.bind
-import ru.ssnexus.mymoviesearcher.App
-import ru.ssnexus.mymoviesearcher.data.MainRepository
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
-import ru.ssnexus.mymoviesearcher.domain.Film
-import ru.ssnexus.mymoviesearcher.domain.Item
+import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
@@ -24,7 +18,6 @@ import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
 import java.util.*
-import kotlin.math.roundToInt
 
 
 class HomeFragment : Fragment() {
@@ -46,8 +39,6 @@ class HomeFragment : Fragment() {
             filmsAdapter.addItems(field)
         }
 
-    private var direction : Int = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
@@ -67,12 +58,12 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
 
+        //viewModel.isInit = true
         initSearchView()
         initPullToRefresh()
         // Инициализируем RecyclerView
         initRecycler()
     }
-
 
     private fun initPullToRefresh() {
 
@@ -80,21 +71,20 @@ class HomeFragment : Fragment() {
             binding.mainRecycler.setOnTouchListener(object: View.OnTouchListener {
                 override fun onTouch(p0: View?, p1: MotionEvent?): Boolean {
                     if (p1?.action == android.view.MotionEvent.ACTION_UP) {
-                        Timber.d("Swipe up!")
                         if(binding.mainRecycler.isEmpty()) return false
                         val lManager = binding.mainRecycler.layoutManager
+
                         if (lManager is LinearLayoutManager)
                         {
-                            if(lManager.findLastCompletelyVisibleItemPosition() == viewModel.totalPageResults - 1)
+                            Timber.d("Swipe up!" + lManager.findLastCompletelyVisibleItemPosition() + " " + lManager.itemCount )
+                            if(lManager.findLastCompletelyVisibleItemPosition() >= lManager.itemCount - 10)
                             {
                                 binding.pullToRefresh.isRefreshing = true
-
                                 //Делаем новый запрос фильмов на сервер
-                                viewModel.getFilms(1)
+                                viewModel.getFilms()
                                 //Убираем крутящиеся колечко
                                binding.pullToRefresh.isRefreshing = false
                             }
-
                         }
                     }
                     return false
@@ -103,9 +93,10 @@ class HomeFragment : Fragment() {
 
             //Вешаем слушатель, чтобы вызвался pull to refresh
             binding.pullToRefresh.setOnRefreshListener {
-                // filmsAdapter.clear()
+
+                viewModel.clearCache()
                 //Делаем новый запрос фильмов на сервер
-                viewModel.getFilms(-1)
+                viewModel.updateFilms()
                 //Убираем крутящиеся колечко
                 binding.pullToRefresh.isRefreshing = false
             }
@@ -116,7 +107,6 @@ class HomeFragment : Fragment() {
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
         }
-
         //Подключаем слушателя изменений введенного текста в поиска
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
@@ -145,7 +135,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun initRecycler(){
-
         //находим наш RV
         binding.mainRecycler.apply {
 
@@ -165,14 +154,12 @@ class HomeFragment : Fragment() {
             viewModel.filmsListLiveData.observe(viewLifecycleOwner,
                 Observer<List<Film>>{
                     filmsDataBase = it;
-                    // Скролл к последнему элементу предыдущей страницы
-                    Timber.d("Scroll to position " + viewModel.scrollToPosition)
-                    if (viewModel.scrollToPosition > 0)
-                    {
-                        scrollToPosition(viewModel.scrollToPosition)
-                        viewModel.scrollToPosition = 0
-                    }
+
                 })
+            filmsAdapter.clearRV()
+            viewModel.setCachedData()
+            if(viewModel.isRefresh) scrollToPosition(0)
+
         }
     }
 }

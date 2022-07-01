@@ -6,30 +6,39 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
+import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
-import ru.ssnexus.mymoviesearcher.domain.Film
+import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.view.fragments.*
+import java.util.concurrent.Executors
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+    @Inject
+    lateinit var interactor: Interactor
+
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        App.instance.dagger.inject(this)
         //Инициализируем объект
         binding = ActivityMainBinding.inflate(layoutInflater)
         //Передаем его в метод
         setContentView(binding.root)
 
         initNavigation()
-
+//        Executors.newSingleThreadExecutor().execute {
+//            interactor.repo.clearCache()
+//        }
         //Запускаем фрагмент при старте
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
             .addToBackStack(null)
             .commit()
-
     }
 
     fun launchDetailsFragment(film: Film) {
