@@ -1,16 +1,20 @@
 package ru.ssnexus.mymoviesearcher.view.fragments
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
-import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
@@ -18,6 +22,7 @@ import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
 import java.util.*
+import java.util.concurrent.Executors
 
 
 class HomeFragment : Fragment() {
@@ -58,7 +63,6 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
 
-        //viewModel.isInit = true
         initSearchView()
         initPullToRefresh()
         // Инициализируем RecyclerView
@@ -94,14 +98,13 @@ class HomeFragment : Fragment() {
             //Вешаем слушатель, чтобы вызвался pull to refresh
             binding.pullToRefresh.setOnRefreshListener {
 
-                viewModel.clearCache()
+                viewModel.interactor.clearCache()
                 //Делаем новый запрос фильмов на сервер
                 viewModel.updateFilms()
                 //Убираем крутящиеся колечко
                 binding.pullToRefresh.isRefreshing = false
             }
         }
-
 
     private fun initSearchView() {
         binding.searchView.setOnClickListener {
@@ -121,7 +124,7 @@ class HomeFragment : Fragment() {
                     filmsAdapter.addItems(filmsDataBase)
                     return true
                 }
-                //Фильтруем список на поискк подходящих сочетаний
+                //Фильтруем список на поиск подходящих сочетаний
                 val result = filmsDataBase.filter {
                     //Чтобы все работало правильно, нужно и запрос, и имя фильма приводить к нижнему регистру
                     @OptIn(kotlin.ExperimentalStdlibApi::class)
@@ -153,13 +156,16 @@ class HomeFragment : Fragment() {
 
             viewModel.filmsListLiveData.observe(viewLifecycleOwner,
                 Observer<List<Film>>{
+                    viewModel.interactor.updateFavorites(it)
                     filmsDataBase = it;
-
                 })
-            filmsAdapter.clearRV()
-            viewModel.setCachedData()
-            if(viewModel.isRefresh) scrollToPosition(0)
+            viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
+                binding.progressBar.isVisible = it
+            })
 
+            Executors.newSingleThreadExecutor().execute {
+                if(viewModel.interactor.getDBSize() == 0) viewModel.updateFilms()
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         initNavigation()
 //        Executors.newSingleThreadExecutor().execute {
-//            interactor.repo.clearCache()
+//            interactor.clearCache()
 //        }
         //Запускаем фрагмент при старте
         supportFragmentManager

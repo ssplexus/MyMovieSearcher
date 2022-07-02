@@ -1,5 +1,6 @@
 package ru.ssnexus.mymoviesearcher.domain
 
+import androidx.lifecycle.LiveData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -9,6 +10,7 @@ import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.data.preferences.PreferenceProvider
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
+import java.util.concurrent.Executors
 
 class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {
 
@@ -32,7 +34,23 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
         })
     }
 
-    fun getFilmsFromDB(): List<Film> = repo.getAllFromDB()
+    fun getFilmsFromDB(): LiveData<List<Film>> = repo.getAllFromDB()
+
+    fun getDBSize(): Int = repo.getSize()
+
+    fun clearCache()
+    {
+        Executors.newSingleThreadExecutor().execute {
+            repo.clearCache()
+        }
+    }
+
+    fun addFilmsToDB(films : List<Film>) {
+        Executors.newSingleThreadExecutor().execute {
+            //Кладем фильмы в бд
+            repo.putToDb(films)
+        }
+    }
 
     fun getFavorites() : List<Film>
     {

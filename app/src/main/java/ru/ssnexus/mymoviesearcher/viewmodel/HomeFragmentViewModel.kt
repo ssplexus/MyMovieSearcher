@@ -1,5 +1,6 @@
 package ru.ssnexus.mymoviesearcher.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
@@ -13,19 +14,15 @@ import javax.inject.Inject
 
 class HomeFragmentViewModel : ViewModel(){
 
-    var isRefresh : Boolean = false
     var currentPage : Int = 0
-    //Сколько фильмов на странице
-    var totalPageResults : Int = 0
-
-    var currentCategory : String = ""
 
     private var currentPageData: List<Film>? = null
 
     private var totalPages : Int = 0
     private val apiCallback : ApiCallback?
 
-    val filmsListLiveData = MutableLiveData<List<Film>>()
+    val filmsListLiveData: LiveData<List<Film>>
+    val showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
 
     //Инициализируем интерактор
     @Inject
@@ -33,13 +30,20 @@ class HomeFragmentViewModel : ViewModel(){
 
     init {
         App.instance.dagger.inject(this)
+        filmsListLiveData = interactor.getFilmsFromDB()
+//        if(interactor.repo.getAllFromDB().value == null)
+//                    Timber.d("Get dB")
+//        interactor.repo.getAllFromDB().value?.let {
+//            Timber.d("Get dB")
+//            if(it.isEmpty()) updateFilms()
+//        }
+
         apiCallback = object : ApiCallback {
             override fun onSuccess(resultsDto: TmdbResultsDto?) {
-
+                showProgressBar.postValue(false)
                 if(resultsDto != null)
                 {
                     currentPage = resultsDto.page
-                    totalPageResults = resultsDto.tmdbFilms.size
                     totalPages = resultsDto.totalPages
                     currentPageData = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
 
@@ -49,29 +53,27 @@ class HomeFragmentViewModel : ViewModel(){
                 {
                     Timber.d("ResultsDTO is null")
                     currentPage = 0
-                    totalPageResults = 0
                     totalPages = 0
                 }
             }
 
             override fun onFailure() {
-                Timber.d("Get films error! " + interactor.getFilmsFromDB().size)
-                Executors.newSingleThreadExecutor().execute {
-                    filmsListLiveData.postValue(interactor.getFilmsFromDB())
-                }
+                Timber.d("Get films error! ")
+                showProgressBar.postValue(false)
             }
         }
-        currentCategory = interactor.getDefaultCategoryFromPreferences()
     }
 
     fun updateFilms() {
         if (apiCallback != null) {
+                showProgressBar.postValue(true)
                 interactor.getFilmsFromApi(1, apiCallback)
         }
     }
 
     fun getFilms() {
         if (apiCallback != null) {
+            showProgressBar.postValue(true)
             interactor.getFilmsFromApi(getPage(), apiCallback)
         }
     }
@@ -82,40 +84,8 @@ class HomeFragmentViewModel : ViewModel(){
         return page
     }
 
-    fun setCachedData() {
-        Executors.newSingleThreadExecutor().execute {
-            val cache = interactor.getFilmsFromDB()
-            if (!cache.isEmpty()) {
-                isRefresh = false
-                interactor.updateFavorites(cache)
-                filmsListLiveData.postValue(cache)
-            }
-            else {
-                isRefresh = true
-                updateFilms()
-            }
-        }
-    }
-
-    fun clearCache()
-    {
-        Executors.newSingleThreadExecutor().execute {
-            interactor.repo.clearCache()
-        }
-    }
-
     fun updatePageData() {
-        Executors.newSingleThreadExecutor().execute {
-            //Кладем фильмы в бд
-            currentPageData?.let {
-                interactor.repo.putToDb(it)
-            }
-            val cache = mutableListOf<Film>()
-            cache.addAll(interactor.repo.getAllFromDB())
-
-            interactor.updateFavorites(cache)
-            filmsListLiveData.postValue(cache)
-        }
+        currentPageData?.let { interactor.addFilmsToDB(it) }
     }
 
     interface ApiCallback {

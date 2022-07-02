@@ -1,5 +1,6 @@
 package ru.ssnexus.mymoviesearcher.data
 
+import androidx.lifecycle.LiveData
 import ru.ssnexus.mymoviesearcher.data.DAO.FilmDao
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import timber.log.Timber
@@ -13,9 +14,9 @@ class MainRepository(private val filmDao: FilmDao) {
 
     }
 
-    fun getAllFromDB(): List<Film> {
-        return filmDao.getCachedFilms()
-    }
+    fun getAllFromDB(): LiveData<List<Film>> = filmDao.getCachedFilms()
+
+    fun getSize() : Int = filmDao.getData().size
 
     fun clearCache()
     {

@@ -11,7 +11,7 @@ object Converter {
                 Film(
                 id = it.id,
                 title = it.title,
-                poster = it?.posterPath,
+                poster = it.posterPath,
                 description = it.overview,
                 rating = it.voteAverage,
                 isInFavorites = false
