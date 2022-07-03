@@ -16,13 +16,19 @@ class HomeFragmentViewModel : ViewModel(){
 
     var currentPage : Int = 0
 
+    //Данные текущей страницы с сервера
     private var currentPageData: List<Film>? = null
 
+    //Всего страниц
     private var totalPages : Int = 0
     private val apiCallback : ApiCallback?
 
+    //Отслеживание базы данных
     val filmsListLiveData: LiveData<List<Film>>
+    //Отслеживание данных состояния прогрессбара
     val showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
+    //Отслеживание ошибок соединения
+    val errorEvent = SingleLiveEvent<String>()
 
     //Инициализируем интерактор
     @Inject
@@ -31,12 +37,6 @@ class HomeFragmentViewModel : ViewModel(){
     init {
         App.instance.dagger.inject(this)
         filmsListLiveData = interactor.getFilmsFromDB()
-//        if(interactor.repo.getAllFromDB().value == null)
-//                    Timber.d("Get dB")
-//        interactor.repo.getAllFromDB().value?.let {
-//            Timber.d("Get dB")
-//            if(it.isEmpty()) updateFilms()
-//        }
 
         apiCallback = object : ApiCallback {
             override fun onSuccess(resultsDto: TmdbResultsDto?) {
@@ -58,12 +58,14 @@ class HomeFragmentViewModel : ViewModel(){
             }
 
             override fun onFailure() {
-                Timber.d("Get films error! ")
+                Timber.d("Get data error!")
+                errorEvent.postValue("Get data error!")
                 showProgressBar.postValue(false)
             }
         }
     }
 
+    //Получить данные 1 стрницы
     fun updateFilms() {
         if (apiCallback != null) {
                 showProgressBar.postValue(true)
@@ -71,6 +73,7 @@ class HomeFragmentViewModel : ViewModel(){
         }
     }
 
+    //Получить фильмы
     fun getFilms() {
         if (apiCallback != null) {
             showProgressBar.postValue(true)
@@ -78,12 +81,14 @@ class HomeFragmentViewModel : ViewModel(){
         }
     }
 
+    //Получить следующую страницу
     fun getPage() : Int {
         var page : Int = currentPage + 1
         if(page !in 1..totalPages) page = 1
         return page
     }
 
+    //Добавление данных в базу и RecyclerView
     fun updatePageData() {
         currentPageData?.let { interactor.addFilmsToDB(it) }
     }

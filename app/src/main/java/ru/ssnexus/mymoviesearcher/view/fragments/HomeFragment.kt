@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
@@ -161,6 +162,10 @@ class HomeFragment : Fragment() {
                 })
             viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
                 binding.progressBar.isVisible = it
+            })
+
+            viewModel.errorEvent.observe(viewLifecycleOwner, Observer<String>{
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
             })
 
             Executors.newSingleThreadExecutor().execute {
