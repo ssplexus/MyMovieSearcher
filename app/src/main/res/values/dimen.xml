@@ -12,6 +12,7 @@
     <!--{ Fragment home-->
     <dimen name="fragment_home_collapsing_tbar_min_height">60dp</dimen>
     <dimen name="fragment_home_search_view_layout_margin">8dp</dimen>
+    <dimen name="fragment_home_progressbar_layout_dimen">100dp</dimen>
     <!--} Fragment home-->
 
     <!--{ Film item view-->

@@ -30,15 +30,9 @@ class SettingsFragmentViewModel : ViewModel() {
         return interactor.getDefaultCategoryFromPreferences()
     }
 
-    fun clearCache()
-    {
-        Executors.newSingleThreadExecutor().execute {
-            interactor.repo.clearCache()
-        }
-    }
 
     fun putCategoryProperty(category: String) {
-        if(getCurrentProperty() != category) clearCache()
+        if(getCurrentProperty() != category) interactor.clearCache()
         //Сохраняем в настройки
         interactor.saveDefaultCategoryToPreferences(category)
         //И сразу забираем, чтобы сохранить состояние в модели

@@ -1,5 +1,6 @@
 package ru.ssnexus.mymoviesearcher.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
@@ -13,19 +14,21 @@ import javax.inject.Inject
 
 class HomeFragmentViewModel : ViewModel(){
 
-    var isRefresh : Boolean = false
     var currentPage : Int = 0
-    //Сколько фильмов на странице
-    var totalPageResults : Int = 0
 
-    var currentCategory : String = ""
-
+    //Данные текущей страницы с сервера
     private var currentPageData: List<Film>? = null
 
+    //Всего страниц
     private var totalPages : Int = 0
     private val apiCallback : ApiCallback?
 
-    val filmsListLiveData = MutableLiveData<List<Film>>()
+    //Отслеживание базы данных
+    val filmsListLiveData: LiveData<List<Film>>
+    //Отслеживание данных состояния прогрессбара
+    val showProgressBar: MutableLiveData<Boolean> = MutableLiveData()
+    //Отслеживание ошибок соединения
+    val errorEvent = SingleLiveEvent<String>()
 
     //Инициализируем интерактор
     @Inject
@@ -33,13 +36,14 @@ class HomeFragmentViewModel : ViewModel(){
 
     init {
         App.instance.dagger.inject(this)
+        filmsListLiveData = interactor.getFilmsFromDB()
+
         apiCallback = object : ApiCallback {
             override fun onSuccess(resultsDto: TmdbResultsDto?) {
-
+                showProgressBar.postValue(false)
                 if(resultsDto != null)
                 {
                     currentPage = resultsDto.page
-                    totalPageResults = resultsDto.tmdbFilms.size
                     totalPages = resultsDto.totalPages
                     currentPageData = Converter.convertApiListToDtoList(resultsDto.tmdbFilms)
 
@@ -49,73 +53,44 @@ class HomeFragmentViewModel : ViewModel(){
                 {
                     Timber.d("ResultsDTO is null")
                     currentPage = 0
-                    totalPageResults = 0
                     totalPages = 0
                 }
             }
 
             override fun onFailure() {
-                Timber.d("Get films error! " + interactor.getFilmsFromDB().size)
-                Executors.newSingleThreadExecutor().execute {
-                    filmsListLiveData.postValue(interactor.getFilmsFromDB())
-                }
+                Timber.d("Get data error!")
+                errorEvent.postValue("Get data error!")
+                showProgressBar.postValue(false)
             }
         }
-        currentCategory = interactor.getDefaultCategoryFromPreferences()
     }
 
+    //Получить данные 1 стрницы
     fun updateFilms() {
         if (apiCallback != null) {
+                showProgressBar.postValue(true)
                 interactor.getFilmsFromApi(1, apiCallback)
         }
     }
 
+    //Получить фильмы
     fun getFilms() {
         if (apiCallback != null) {
+            showProgressBar.postValue(true)
             interactor.getFilmsFromApi(getPage(), apiCallback)
         }
     }
 
+    //Получить следующую страницу
     fun getPage() : Int {
         var page : Int = currentPage + 1
         if(page !in 1..totalPages) page = 1
         return page
     }
 
-    fun setCachedData() {
-        Executors.newSingleThreadExecutor().execute {
-            val cache = interactor.getFilmsFromDB()
-            if (!cache.isEmpty()) {
-                isRefresh = false
-                interactor.updateFavorites(cache)
-                filmsListLiveData.postValue(cache)
-            }
-            else {
-                isRefresh = true
-                updateFilms()
-            }
-        }
-    }
-
-    fun clearCache()
-    {
-        Executors.newSingleThreadExecutor().execute {
-            interactor.repo.clearCache()
-        }
-    }
-
+    //Добавление данных в базу и RecyclerView
     fun updatePageData() {
-        Executors.newSingleThreadExecutor().execute {
-            //Кладем фильмы в бд
-            currentPageData?.let {
-                interactor.repo.putToDb(it)
-            }
-            val cache = mutableListOf<Film>()
-            cache.addAll(interactor.repo.getAllFromDB())
-
-            interactor.updateFavorites(cache)
-            filmsListLiveData.postValue(cache)
-        }
+        currentPageData?.let { interactor.addFilmsToDB(it) }
     }
 
     interface ApiCallback {
