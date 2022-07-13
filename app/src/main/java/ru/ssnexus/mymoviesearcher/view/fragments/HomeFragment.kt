@@ -14,6 +14,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
@@ -30,6 +32,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+
+    private lateinit var scope: CoroutineScope
 
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
@@ -99,7 +103,9 @@ class HomeFragment : Fragment() {
             //Вешаем слушатель, чтобы вызвался pull to refresh
             binding.pullToRefresh.setOnRefreshListener {
 
-                viewModel.interactor.clearCache()
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.interactor.clearCache()
+                }
                 //Делаем новый запрос фильмов на сервер
                 viewModel.updateFilms()
                 //Убираем крутящиеся колечко
@@ -155,22 +161,29 @@ class HomeFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
 
-            viewModel.filmsListLiveData.observe(viewLifecycleOwner,
-                Observer<List<Film>>{
-                    viewModel.interactor.updateFavorites(it)
-                    filmsDataBase = it;
-                })
-            viewModel.showProgressBar.observe(viewLifecycleOwner, Observer<Boolean> {
-                binding.progressBar.isVisible = it
-            })
+            scope = CoroutineScope(Dispatchers.IO).also { scope ->
+                scope.launch {
+                    if(viewModel.interactor.getDBSize() == 0) viewModel.updateFilms()
+                     viewModel.filmsListData.collect {
+                         withContext(Dispatchers.Main){
+                            filmsDataBase = viewModel.interactor.updateFavorites(it)
+                         }
+                     }
+                }
+            }
 
-            viewModel.errorEvent.observe(viewLifecycleOwner, Observer<String>{
-                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
-            })
-
-            Executors.newSingleThreadExecutor().execute {
-                if(viewModel.interactor.getDBSize() == 0) viewModel.updateFilms()
+            scope.launch {
+                for (element in viewModel.showProgressBar) {
+                    launch(Dispatchers.Main) {
+                        binding.progressBar.isVisible = element
+                    }
+                }
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        scope.cancel()
     }
 }

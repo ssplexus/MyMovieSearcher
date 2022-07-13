@@ -2,6 +2,9 @@ package ru.ssnexus.mymoviesearcher.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import timber.log.Timber
@@ -32,7 +35,13 @@ class SettingsFragmentViewModel : ViewModel() {
 
 
     fun putCategoryProperty(category: String) {
-        if(getCurrentProperty() != category) interactor.clearCache()
+        if(getCurrentProperty() != category)
+        {
+            CoroutineScope(Dispatchers.IO).launch {
+                interactor.clearCache()
+            }
+
+        }
         //Сохраняем в настройки
         interactor.saveDefaultCategoryToPreferences(category)
         //И сразу забираем, чтобы сохранить состояние в модели
