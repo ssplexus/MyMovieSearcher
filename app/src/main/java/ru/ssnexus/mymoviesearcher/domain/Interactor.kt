@@ -1,27 +1,29 @@
 package ru.ssnexus.mymoviesearcher.domain
 
-import androidx.lifecycle.LiveData
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.ssnexus.mymoviesearcher.data.*
+import ru.ssnexus.mymoviesearcher.data.API
+import ru.ssnexus.mymoviesearcher.data.MainRepository
+import ru.ssnexus.mymoviesearcher.data.TmdbApi
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
 import ru.ssnexus.mymoviesearcher.data.preferences.PreferenceProvider
 import ru.ssnexus.mymoviesearcher.utils.Converter
-import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
-import java.util.concurrent.Executors
 
 class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {
 
     val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-    var progressBarState = Channel<Boolean>(Channel.CONFLATED)
+    var progressBarState: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
     //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
     //и страницу, которую нужно загрузить (это для пагинации)
@@ -33,25 +35,23 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
                 Timber.d("Get Films Success")
                 val list = Converter.convertApiListToDtoList(response.body()?.tmdbFilms)
                 //Кладем фильмы в бд
-                //В случае успешного ответа кладем фильмы в БД и выключаем ProgressBar
-                scope.launch {
+                Completable.fromSingle<List<Film>> {
                     repo.putToDb(list)
-                    progressBarState.send(false)
                 }
-
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
+                progressBarState.onNext(false)
             }
 
             override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
                 Timber.d("Get Films Failure")
                 //В случае провала выключаем ProgressBar
-                scope.launch {
-                    progressBarState.send(false)
-                }
+                progressBarState.onNext(false)
             }
         })
     }
 
-    fun getFilmsFromDB(): Flow<List<Film>> = repo.getAllFromDB()
+    fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()
 
     fun getDBSize(): Int = repo.getSize()
 

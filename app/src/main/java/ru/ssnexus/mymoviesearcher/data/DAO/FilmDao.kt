@@ -1,11 +1,10 @@
 package ru.ssnexus.mymoviesearcher.data.DAO
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
+import io.reactivex.rxjava3.core.Observable
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 
 //Помечаем, что это не просто интерфейс, а Dao-объект
@@ -13,7 +12,7 @@ import ru.ssnexus.mymoviesearcher.data.entity.Film
 interface FilmDao {
     //Запрос на всю таблицу
     @Query("SELECT * FROM cached_films")
-    fun getCachedFilms(): Flow<List<Film>>
+    fun getCachedFilms(): Observable<List<Film>>
 
     @Query("SELECT * FROM cached_films")
     fun getData(): List<Film>
