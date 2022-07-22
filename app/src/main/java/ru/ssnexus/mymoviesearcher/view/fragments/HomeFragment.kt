@@ -13,12 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
+import ru.ssnexus.mymoviesearcher.utils.AutoDisposable
+import ru.ssnexus.mymoviesearcher.utils.addTo
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
@@ -33,7 +37,7 @@ class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
 
-    private lateinit var scope: CoroutineScope
+    private val autoDisposable = AutoDisposable()
 
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(HomeFragmentViewModel::class.java)
@@ -52,6 +56,7 @@ class HomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+        autoDisposable.bindTo(lifecycle)
     }
 
     override fun onCreateView(
@@ -161,29 +166,18 @@ class HomeFragment : Fragment() {
             val decorator = TopSpacingItemDecoration(8)
             addItemDecoration(decorator)
 
-            scope = CoroutineScope(Dispatchers.IO).also { scope ->
-                scope.launch {
-                    if(viewModel.interactor.getDBSize() == 0) viewModel.updateFilms()
-                     viewModel.filmsListData.collect {
-                         withContext(Dispatchers.Main){
-                            filmsDataBase = viewModel.interactor.updateFavorites(it)
-                         }
-                     }
-                }
-            }
+            viewModel.filmsListData
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { list ->
+                    filmsDataBase = list
+                }.addTo(autoDisposable)
 
-            scope.launch {
-                for (element in viewModel.showProgressBar) {
-                    launch(Dispatchers.Main) {
-                        binding.progressBar.isVisible = element
-                    }
-                }
-            }
+            viewModel.showProgressBar
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe{
+                    binding.progressBar.isVisible = it
+                }.addTo(autoDisposable)
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        scope.cancel()
     }
 }
