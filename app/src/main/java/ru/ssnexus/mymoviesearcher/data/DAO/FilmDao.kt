@@ -15,6 +15,9 @@ interface FilmDao {
     fun getCachedFilms(): Observable<List<Film>>
 
     @Query("SELECT * FROM cached_films")
+    fun getCachedFilmsList(): List<Film>
+
+    @Query("SELECT * FROM cached_films")
     fun getData(): List<Film>
 
     //Кладём списком в БД, в случае конфликта перезаписываем

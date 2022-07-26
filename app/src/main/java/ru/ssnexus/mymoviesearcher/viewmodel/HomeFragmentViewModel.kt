@@ -13,9 +13,11 @@ import javax.inject.Inject
 class HomeFragmentViewModel : ViewModel(){
 
     var currentPage : Int = 0
+    var currentSearchPage : Int = 0
+    private var searchMode : Boolean = false
 
     //Отслеживание базы данных
-    val filmsListData: Observable<List<Film>>
+    var filmsListData: Observable<List<Film>>
     //Отслеживание данных состояния прогрессбара
     val showProgressBar: BehaviorSubject<Boolean>
 
@@ -27,7 +29,6 @@ class HomeFragmentViewModel : ViewModel(){
         App.instance.dagger.inject(this)
         showProgressBar = interactor.progressBarState
         filmsListData = interactor.getFilmsFromDB()
-        updateFilms()
     }
 
     //Получить данные 1 стрницы
@@ -42,4 +43,20 @@ class HomeFragmentViewModel : ViewModel(){
         interactor.getFilmsFromApi(++currentPage)
         Timber.d("Current page = " + currentPage)
     }
+
+    //Поиск фильмов
+    fun getSearchResult(search: String):Observable<List<Film>> {
+        Timber.d("Debug: getSearchResult " + search + " on page " + "${currentSearchPage + 1}")
+        return interactor.getSearchResultFromApi(search, ++currentSearchPage)
+    }
+
+    fun setSearch(mode: Boolean = true){
+        Timber.d("setSearch = " + mode)
+        if(mode) currentSearchPage = 0
+        else interactor.recallData()
+        searchMode = mode
+
+    }
+
+    fun getSearch(): Boolean = searchMode
 }

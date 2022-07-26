@@ -22,7 +22,6 @@ import timber.log.Timber
 
 class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private val preferences: PreferenceProvider) {
 
-    val scope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     var progressBarState: BehaviorSubject<Boolean> = BehaviorSubject.create()
 
     //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
@@ -49,6 +48,22 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
                 progressBarState.onNext(false)
             }
         })
+    }
+
+    // Получаем результат запроса поиска
+    fun getSearchResultFromApi(search: String, page: Int = 1): Observable<List<Film>> = retrofitService.getFilmFromSearch(API.KEY, "ru-RU", search, page)
+        .map {
+            Timber.d("tmdbFilms.size = " + it.tmdbFilms.size)
+            Converter.convertApiListToDtoList(it.tmdbFilms)
+        }
+
+    // Обновление rview исходными значениями при очистки поля поиска фильмов
+    fun recallData(){
+        Completable.fromSingle<List<Film>> {
+            repo.putToDb(repo.getAllFromDBAsList())
+        }
+            .subscribeOn(Schedulers.io())
+            .subscribe()
     }
 
     fun getFilmsFromDB(): Observable<List<Film>> = repo.getAllFromDB()
