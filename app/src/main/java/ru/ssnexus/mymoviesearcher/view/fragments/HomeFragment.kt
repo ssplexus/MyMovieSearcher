@@ -5,19 +5,21 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
@@ -29,7 +31,7 @@ import ru.ssnexus.mymoviesearcher.view.rv_adapters.TopSpacingItemDecoration
 import ru.ssnexus.mymoviesearcher.viewmodel.HomeFragmentViewModel
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 
 class HomeFragment : Fragment() {
@@ -45,8 +47,6 @@ class HomeFragment : Fragment() {
     private var filmsDataBase = listOf<Film>()
         //Используем backing field
         set(value) {
-            //Если придет такое же значение, то мы выходим из метода
-            if (field == value) return
             //Если пришло другое значение, то кладем его в переменную
             field = value
             //Обновляем RV адаптер
@@ -94,8 +94,14 @@ class HomeFragment : Fragment() {
                             if(lManager.findLastCompletelyVisibleItemPosition() >= lManager.itemCount - 10)
                             {
                                 binding.pullToRefresh.isRefreshing = true
-                                //Делаем новый запрос фильмов на сервер
-                                viewModel.getFilms()
+
+                                //Делаем новый запрос фильмов на сервер если не режим поиска
+                                if(!viewModel.getSearch()) viewModel.getFilms()
+                                //Иначе получаем следующую страницу результата поиска
+                                else {
+                                    viewModel.getSearchResult(binding.searchView.query.toString()).runSearch()
+                                }
+
                                 //Убираем крутящиеся колечко
                                binding.pullToRefresh.isRefreshing = false
                             }
@@ -111,8 +117,17 @@ class HomeFragment : Fragment() {
                 CoroutineScope(Dispatchers.IO).launch {
                     viewModel.interactor.clearCache()
                 }
-                //Делаем новый запрос фильмов на сервер
-                viewModel.updateFilms()
+
+                when(!viewModel.getSearch()){
+                    //Делаем новый запрос фильмов на сервер
+                    true -> viewModel.updateFilms()
+                    //Показываем первую страницу поиска
+                    false -> {
+                        viewModel.currentSearchPage = 0
+                        viewModel.getSearchResult(binding.searchView.query.toString()).runSearch()
+                    }
+                }
+
                 //Убираем крутящиеся колечко
                 binding.pullToRefresh.isRefreshing = false
             }
@@ -122,31 +137,52 @@ class HomeFragment : Fragment() {
         binding.searchView.setOnClickListener {
             binding.searchView.isIconified = false
         }
-        //Подключаем слушателя изменений введенного текста в поиска
-        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            //Этот метод отрабатывает при нажатии кнопки "поиск" на софт клавиатуре
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return true
-            }
-            //Этот метод отрабатывает на каждое изменения текста
-            override fun onQueryTextChange(newText: String?): Boolean {
-                //Если ввод пуст то вставляем в адаптер всю БД
-                if(newText == null) return false
-                if (newText.isEmpty()) {
-                    filmsAdapter.addItems(filmsDataBase)
-                    return true
+
+        Observable.create(ObservableOnSubscribe<String>{subscriber ->
+            //Вешаем слушатель на клавиатуру
+            binding.searchView.setOnQueryTextListener(object :
+            //Вызывается на ввод символов
+                SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String): Boolean {
+                    Timber.d("onQueryTextChange")
+                    viewModel.setSearch()
+                    subscriber.onNext(newText)
+                    return false
                 }
-                //Фильтруем список на поиск подходящих сочетаний
-                val result = filmsDataBase.filter {
-                    //Чтобы все работало правильно, нужно и запрос, и имя фильма приводить к нижнему регистру
-                    @OptIn(kotlin.ExperimentalStdlibApi::class)
-                    it.title.lowercase(Locale.getDefault()).contains(newText.lowercase(Locale.getDefault()))
+
+                //Вызывается по нажатию кнопки "Поиск"
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    Timber.d("onQueryTextSubmit")
+                    viewModel.setSearch()
+                    subscriber.onNext(query)
+                    return false
                 }
-                //Добавляем в адаптер
-                filmsAdapter.addItems(result)
-                return true
-            }
+            })
         })
+        .subscribeOn(Schedulers.io())
+        .map {
+            it.toLowerCase(Locale.getDefault()).trim()
+        }
+        .debounce(800, TimeUnit.MILLISECONDS)
+        .filter {
+
+            //Если в поиске пустое поле, возвращаем список фильмов по умолчанию
+            if(!it.isNotBlank()) {
+                Timber.d("Blank")
+                viewModel.setSearch(false)
+            }
+            it.isNotBlank()
+        }
+        .flatMap {
+            Timber.d("Search = " + it)
+            viewModel.getSearchResult(it)
+        }
+            .runSearch()
+
+
+        binding.searchView.setOnClickListener {
+            binding.searchView.isIconified = false
+        }
     }
 
     private fun initRecycler(){
@@ -170,7 +206,8 @@ class HomeFragment : Fragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { list ->
-                    filmsDataBase = list
+                    Timber.d("Data!!!")
+                    filmsDataBase = viewModel.interactor.updateFavorites(list)
                 }.addTo(autoDisposable)
 
             viewModel.showProgressBar
@@ -180,4 +217,23 @@ class HomeFragment : Fragment() {
                 }.addTo(autoDisposable)
         }
     }
+
+    // Запуск поиска
+    fun Observable<List<Film>>.runSearch(){
+        this.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = {
+                    Timber.d("Что-то пошло не так")
+                    //Toast.makeText(requireContext(), "Что-то пошло не так", Toast.LENGTH_SHORT).show()
+                },
+                onNext = {
+                    Timber.d("OnNext " + it.size)
+                    filmsAdapter.addItems(it)
+                    main_recycler.scrollToPosition(0)
+                }
+            )
+            .addTo(autoDisposable)
+    }
+
 }
