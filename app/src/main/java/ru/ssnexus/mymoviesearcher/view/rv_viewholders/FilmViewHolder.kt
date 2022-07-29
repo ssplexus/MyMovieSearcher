@@ -3,7 +3,7 @@ package ru.ssnexus.mymoviesearcher.view.rv_viewholders
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.data.ApiConstants
+import ru.ssnexus.remote_module.entity.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FilmItemBinding
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 

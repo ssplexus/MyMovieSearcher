@@ -1,6 +1,5 @@
-package ru.ssnexus.mymoviesearcher.di.modules
+package ru.ssnexus.remote_module
 
-import androidx.databinding.ktx.BuildConfig
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -8,10 +7,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import ru.ssnexus.mymoviesearcher.App
-import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.data.ApiConstants
-import ru.ssnexus.mymoviesearcher.data.TmdbApi
+import ru.ssnexus.remote_module.entity.ApiConstants
+import ru.ssnexus.remote_module.entity.ApiConstants.HTTP_CLIENT_TIMEOUT
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -22,8 +19,8 @@ class RemoteModule {
     @Singleton
     fun provideOkHttpClient(): OkHttpClient = OkHttpClient.Builder()
         //Настраиваем таймауты для медленного интернета
-        .callTimeout(App.instance.resources.getInteger(R.integer.http_client_timeout).toLong(), TimeUnit.SECONDS)
-        .readTimeout(App.instance.resources.getInteger(R.integer.http_client_timeout).toLong(), TimeUnit.SECONDS)
+        .callTimeout(HTTP_CLIENT_TIMEOUT.toLong(), TimeUnit.SECONDS)
+        .readTimeout(HTTP_CLIENT_TIMEOUT.toLong(), TimeUnit.SECONDS)
         //Добавляем логгер
         .addInterceptor(HttpLoggingInterceptor().apply {
             if (BuildConfig.DEBUG) {

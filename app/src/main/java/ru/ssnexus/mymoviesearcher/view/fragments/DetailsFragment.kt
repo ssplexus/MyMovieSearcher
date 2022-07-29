@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.*
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.data.ApiConstants
+import ru.ssnexus.remote_module.entity.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel

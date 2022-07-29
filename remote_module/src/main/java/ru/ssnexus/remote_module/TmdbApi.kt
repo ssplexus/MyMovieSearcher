@@ -1,10 +1,10 @@
-package ru.ssnexus.mymoviesearcher.data
+package ru.ssnexus.remote_module
 
 import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.ssnexus.mymoviesearcher.data.entity.TmdbResultsDto
+import ru.ssnexus.remote_module.entity.TmdbResultsDto
 
 
 interface TmdbApi {
@@ -14,7 +14,7 @@ interface TmdbApi {
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): retrofit2.Call<TmdbResultsDto>
+    ): Observable<TmdbResultsDto>
 
     @GET("3/search/movie")
     fun getFilmFromSearch(
