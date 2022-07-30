@@ -6,7 +6,7 @@ import ru.ssnexus.mymoviesearcher.di.AppComponent
 import ru.ssnexus.mymoviesearcher.di.DaggerAppComponent
 import ru.ssnexus.mymoviesearcher.di.modules.DatabaseModule
 import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
-import ru.ssnexus.remote_module.RemoteModule
+import ru.ssnexus.remote_module.DaggerRemoteComponent
 import timber.log.Timber
 
 class App : Application() {

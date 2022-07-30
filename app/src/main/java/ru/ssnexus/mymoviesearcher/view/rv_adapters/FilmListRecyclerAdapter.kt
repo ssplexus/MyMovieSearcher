@@ -6,7 +6,6 @@ import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.film_item.view.*
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil
@@ -53,11 +52,11 @@ class FilmListRecyclerAdapter(private val clickListener: OnItemClickListener) : 
                 //Обрабатываем нажатие на весь элемент целиком(можно сделать на отдельный элемент
                 //например, картинку) и вызываем метод нашего листенера, который мы получаем из
                 //конструктора адаптера
-                filmViewHolder.binding.root.item_container.setOnClickListener {
+                filmViewHolder.binding.itemContainer.setOnClickListener{
                     clickListener.click(items[position])
                 }
                 // Анимирование рейтинга
-                filmViewHolder.binding.root.rating_donut.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_animation)
+                filmViewHolder.binding.ratingDonut.animation = AnimationUtils.loadAnimation(holder.itemView.context, R.anim.scale_animation)
             }
         }
     }

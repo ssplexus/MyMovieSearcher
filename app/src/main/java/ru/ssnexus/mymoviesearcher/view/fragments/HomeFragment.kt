@@ -16,7 +16,6 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,7 +70,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        AnimationHelper.performFragmentCircularRevealAnimation(home_fragment_root, requireActivity(), 1)
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.homeFragmentRoot, requireActivity(), 1)
 
         initSearchView()
         initPullToRefresh()
@@ -230,7 +229,7 @@ class HomeFragment : Fragment() {
                 onNext = {
                     Timber.d("OnNext " + it.size)
                     filmsAdapter.addItems(it)
-                    main_recycler.scrollToPosition(0)
+                    binding.mainRecycler.scrollToPosition(0)
                 }
             )
             .addTo(autoDisposable)

@@ -4,15 +4,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.view.fragments.*
-import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -62,8 +59,6 @@ class MainActivity : AppCompatActivity() {
     fun initNavigation()
     {
         binding.bottomNavigation.setOnNavigationItemSelectedListener {
-
-            val snackbar = Snackbar.make(layout_main, "", Snackbar.LENGTH_SHORT)
 
             when (it.itemId) {
 
