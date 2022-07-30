@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.ssnexus.mymoviesearcher.databinding.FragmentFavoritesBinding
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
 import ru.ssnexus.mymoviesearcher.utils.ItemTouchHelperCallback
 import ru.ssnexus.mymoviesearcher.view.MainActivity

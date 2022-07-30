@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil
 import ru.ssnexus.mymoviesearcher.view.rv_viewholders.FilmViewHolder
 

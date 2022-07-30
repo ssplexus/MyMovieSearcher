@@ -9,3 +9,4 @@ dependencyResolutionManagement {
 rootProject.name = "MyMovieSearcher"
 include ':app'
 include ':remote_module'
+include ':database_module'

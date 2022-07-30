@@ -1,9 +1,9 @@
 package ru.ssnexus.mymoviesearcher.di
 
 import dagger.Component
-import ru.ssnexus.mymoviesearcher.di.modules.DatabaseModule
+import ru.ssnexus.database_module.DatabaseModule
+import ru.ssnexus.database_module.DatabaseProvider
 import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
-import ru.ssnexus.remote_module.RemoteModule
 import ru.ssnexus.mymoviesearcher.view.MainActivity
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
 import ru.ssnexus.mymoviesearcher.viewmodel.FavoritesFragmentViewModel
@@ -15,9 +15,8 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     //Внедряем все модули, нужные для этого компонента
-    dependencies = [RemoteProvider::class],
+    dependencies = [RemoteProvider::class, DatabaseProvider::class],
     modules = [
-        DatabaseModule::class,
         DomainModule::class
     ]
 )

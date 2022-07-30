@@ -177,12 +177,6 @@ dependencies {
     implementation dagger
     kapt daggerCompiler
 
-    //Room
-    def room_version = "2.3.0-beta02"
-    implementation "androidx.room:room-runtime:$room_version"
-    implementation "androidx.room:room-rxjava3:2.3.0-beta02"
-    kapt "androidx.room:room-compiler:$room_version"
-
     //Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2'
@@ -194,4 +188,7 @@ dependencies {
 
     //Remote module
     implementation project(":remote_module")
+
+    //Database module
+    implementation project(":database_module")
 }

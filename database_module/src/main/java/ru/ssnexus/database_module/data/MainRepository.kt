@@ -1,9 +1,9 @@
-package ru.ssnexus.mymoviesearcher.data
+package ru.ssnexus.database_module.data
 
 import io.reactivex.rxjava3.core.Observable
-import ru.ssnexus.mymoviesearcher.data.DAO.FilmDao
-import ru.ssnexus.mymoviesearcher.data.entity.Film
-import timber.log.Timber
+import ru.ssnexus.database_module.data.DAO.FilmDao
+import ru.ssnexus.database_module.data.entity.Film
+//import timber.log.Timber
 
 class MainRepository(private val filmDao: FilmDao) {
     val favoritesFilms = mutableListOf<Film>()
@@ -22,7 +22,7 @@ class MainRepository(private val filmDao: FilmDao) {
 
     fun clearCache()
     {
-        Timber.d("ClearCache")
+        //Timber.d("ClearCache")
         filmDao.nukeTable()
     }
 }

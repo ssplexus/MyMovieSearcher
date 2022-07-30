@@ -23,7 +23,7 @@ import kotlinx.coroutines.*
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.remote_module.entity.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
 
 class DetailsFragment : Fragment() {

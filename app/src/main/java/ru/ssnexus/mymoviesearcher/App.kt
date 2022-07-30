@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.res.Configuration
 import ru.ssnexus.mymoviesearcher.di.AppComponent
 import ru.ssnexus.mymoviesearcher.di.DaggerAppComponent
-import ru.ssnexus.mymoviesearcher.di.modules.DatabaseModule
 import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
 import ru.ssnexus.remote_module.DaggerRemoteComponent
+import ru.ssnexus.database_module.DaggerDatabaseComponent
 import timber.log.Timber
 
 class App : Application() {
@@ -24,10 +24,11 @@ class App : Application() {
         instance = this
 
         val remoteProvider = DaggerRemoteComponent.create()
+        val databaseProvider = DaggerDatabaseComponent.create()
         //Создаем компонент
         dagger = DaggerAppComponent.builder()
             .remoteProvider(remoteProvider)
-            .databaseModule(DatabaseModule())
+            .databaseProvider(databaseProvider)
             .domainModule(DomainModule(this))
             .build()
 

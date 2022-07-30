@@ -6,10 +6,9 @@ import io.reactivex.rxjava3.kotlin.subscribeBy
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import ru.ssnexus.mymoviesearcher.data.API
-import ru.ssnexus.mymoviesearcher.data.MainRepository
+import ru.ssnexus.database_module.data.MainRepository
 import ru.ssnexus.remote_module.TmdbApi
-import ru.ssnexus.mymoviesearcher.data.entity.Film
-import ru.ssnexus.remote_module.entity.TmdbResultsDto
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.data.preferences.PreferenceProvider
 import ru.ssnexus.mymoviesearcher.utils.Converter
 import timber.log.Timber

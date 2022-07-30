@@ -1,12 +1,12 @@
-package ru.ssnexus.mymoviesearcher.di.modules
+package ru.ssnexus.database_module
 
 import android.content.Context
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import ru.ssnexus.mymoviesearcher.data.DAO.FilmDao
-import ru.ssnexus.mymoviesearcher.data.MainRepository
-import ru.ssnexus.mymoviesearcher.data.db.AppDatabase
+import ru.ssnexus.database_module.data.DAO.FilmDao
+import ru.ssnexus.database_module.data.MainRepository
+import ru.ssnexus.database_module.data.db.AppDatabase
 import javax.inject.Singleton
 
 @Module

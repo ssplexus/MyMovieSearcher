@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.data.entity
+package ru.ssnexus.database_module.data.entity
 
 import android.os.Parcelable
 import androidx.room.ColumnInfo

@@ -3,7 +3,7 @@ package ru.ssnexus.mymoviesearcher.utils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.view.rv_adapters.FilmListRecyclerAdapter
 import ru.ssnexus.mymoviesearcher.domain.Item
 import ru.ssnexus.mymoviesearcher.domain.ItemDiffUtil

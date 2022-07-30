@@ -19,7 +19,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.FragmentHomeBinding
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
 import ru.ssnexus.mymoviesearcher.utils.AutoDisposable
