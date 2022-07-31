@@ -10,7 +10,10 @@ import ru.ssnexus.database_module.data.db.AppDatabase
 import javax.inject.Singleton
 
 @Module
-class DatabaseModule {
+class DatabaseModule (val context: Context){
+
+    @Provides
+    fun provideContext() = context
 
     @Singleton
     @Provides
