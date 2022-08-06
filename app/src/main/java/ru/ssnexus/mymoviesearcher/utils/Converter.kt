@@ -1,7 +1,7 @@
 package ru.ssnexus.mymoviesearcher.utils
 
-import ru.ssnexus.mymoviesearcher.data.entity.TmdbFilm
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.remote_module.entity.TmdbFilm
+import ru.ssnexus.database_module.data.entity.Film
 
 object Converter {
     fun convertApiListToDtoList(list: List<TmdbFilm>?): List<Film> {

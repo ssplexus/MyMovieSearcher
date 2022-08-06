@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import ru.ssnexus.mymoviesearcher.App
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import java.net.URL
 import javax.inject.Inject

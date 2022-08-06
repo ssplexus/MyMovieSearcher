@@ -5,7 +5,7 @@ import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.subjects.BehaviorSubject
 import kotlinx.coroutines.channels.Channel
 import ru.ssnexus.mymoviesearcher.App
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import timber.log.Timber
 import javax.inject.Inject

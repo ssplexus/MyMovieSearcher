@@ -3,9 +3,9 @@ package ru.ssnexus.mymoviesearcher.view.rv_viewholders
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.ssnexus.mymoviesearcher.R
-import ru.ssnexus.mymoviesearcher.data.ApiConstants
+import ru.ssnexus.remote_module.entity.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FilmItemBinding
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 
 class FilmViewHolder(val binding: FilmItemBinding) : RecyclerView.ViewHolder(binding.root) {
     //Привязываем View из layout к переменным

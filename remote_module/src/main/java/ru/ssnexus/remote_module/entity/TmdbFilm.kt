@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.data.entity
+package ru.ssnexus.remote_module.entity
 
 import com.google.gson.annotations.SerializedName
 

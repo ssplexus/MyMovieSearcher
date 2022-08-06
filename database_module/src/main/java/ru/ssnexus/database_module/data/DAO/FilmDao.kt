@@ -1,11 +1,11 @@
-package ru.ssnexus.mymoviesearcher.data.DAO
+package ru.ssnexus.database_module.data.DAO
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import io.reactivex.rxjava3.core.Observable
-import ru.ssnexus.mymoviesearcher.data.entity.Film
+import ru.ssnexus.database_module.data.entity.Film
 
 //Помечаем, что это не просто интерфейс, а Dao-объект
 @Dao

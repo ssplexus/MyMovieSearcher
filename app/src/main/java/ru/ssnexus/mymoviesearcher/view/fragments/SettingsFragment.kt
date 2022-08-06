@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import kotlinx.android.synthetic.main.fragment_settings.*
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.mymoviesearcher.databinding.FragmentSettingsBinding
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
@@ -30,7 +29,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         //Подключаем анимации и передаем номер позиции у кнопки в нижнем меню
-        AnimationHelper.performFragmentCircularRevealAnimation(settings_fragment_root, requireActivity(), 5)
+        AnimationHelper.performFragmentCircularRevealAnimation(binding.settingsFragmentRoot, requireActivity(), 5)
         //Слушаем, какой у нас сейчас выбран вариант в настройках
 
         viewModel.categoryPropertyLifeData.observe(viewLifecycleOwner, Observer<String> {
