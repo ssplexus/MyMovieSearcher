@@ -1,5 +1,8 @@
 package ru.ssnexus.mymoviesearcher.view
 
+import android.content.BroadcastReceiver
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -9,12 +12,15 @@ import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.domain.Interactor
+import ru.ssnexus.mymoviesearcher.utils.ConnectionChecker
 import ru.ssnexus.mymoviesearcher.view.fragments.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var interactor: Interactor
+
+    private lateinit var receiver: BroadcastReceiver
 
     private lateinit var binding: ActivityMainBinding
 
@@ -27,15 +33,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initNavigation()
-//        Executors.newSingleThreadExecutor().execute {
-//            interactor.clearCache()
-//        }
+
+        // Приёмник внешних событий
+        receiver = ConnectionChecker()
+
+        // Фильтр событий
+        val filters = IntentFilter().apply {
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_BATTERY_LOW)
+            addAction(Intent.ACTION_BATTERY_OKAY)
+        }
+
+        // Регистрация приёмника
+        registerReceiver(receiver, filters)
+
         //Запускаем фрагмент при старте
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_placeholder, HomeFragment())
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Разрегистрируем приёмник
+        unregisterReceiver(receiver)
     }
 
     fun launchDetailsFragment(film: Film) {

@@ -37,32 +37,6 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
             )
     }
 
-//    //В конструктор мы будем передавать коллбэк из вью модели, чтобы реагировать на то, когда фильмы будут получены
-//    //и страницу, которую нужно загрузить (это для пагинации)
-//    fun getFilmsFromApi(page: Int) {
-//        Timber.d("Get Films From API")
-//        retrofitService.getFilms(getDefaultCategoryFromPreferences(), API.KEY, "ru-RU", page).enqueue(object : Callback<TmdbResultsDto> {
-//            override fun onResponse(call: Call<TmdbResultsDto>, response: Response<TmdbResultsDto>) {
-//                //При успехе мы вызываем метод передаем onSuccess и в этот коллбэк список фильмов
-//                Timber.d("Get Films Success")
-//                val list = Converter.convertApiListToDtoList(response.body()?.tmdbFilms)
-//                //Кладем фильмы в бд
-//                Completable.fromSingle<List<Film>> {
-//                    repo.putToDb(list)
-//                }
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe()
-//                progressBarState.onNext(false)
-//            }
-//
-//            override fun onFailure(call: Call<TmdbResultsDto>, t: Throwable) {
-//                Timber.d("Get Films Failure")
-//                //В случае провала выключаем ProgressBar
-//                progressBarState.onNext(false)
-//            }
-//        })
-//    }
-
     // Получаем результат запроса поиска
     fun getSearchResultFromApi(search: String, page: Int = 1): Observable<List<Film>> = retrofitService.getFilmFromSearch(API.KEY, "ru-RU", search, page)
         .map {

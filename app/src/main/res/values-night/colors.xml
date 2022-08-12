@@ -7,7 +7,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="card_text_color">#FF363636</color>
-    <color name="card_bg_color">#FFFFFFFF</color>
+    <color name="card_text_color">#FFFFFFFF</color>
+    <color name="card_bg_color">#FF3700B3</color>
     <color name="holoOrangeLight">@android:color/holo_orange_light</color>
 </resources>
