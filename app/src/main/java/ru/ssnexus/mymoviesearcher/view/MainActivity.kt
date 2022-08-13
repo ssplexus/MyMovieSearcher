@@ -14,6 +14,7 @@ import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.utils.ConnectionChecker
 import ru.ssnexus.mymoviesearcher.view.fragments.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +47,17 @@ class MainActivity : AppCompatActivity() {
 
         // Регистрация приёмника
         registerReceiver(receiver, filters)
+
+        if(savedInstanceState == null)
+        {
+            val extras = intent.extras
+            if(extras != null)
+            {
+                val film = extras.get(R.string.parcel_item_film.toString()) as Film
+                launchDetailsFragment(film)
+                return
+            }
+        }
 
         //Запускаем фрагмент при старте
         supportFragmentManager

@@ -19,6 +19,7 @@
     <string name="parcel_item_film">film</string>
     <string name="is_empty_list">Your list is empty</string>
     <string name="poster_small">w342</string>
+    <string name="poster_normal">w500</string>
     <string name="poster_big">w780</string>
 
     <string name="menu_settings_title_text">Настройки</string>
@@ -27,6 +28,8 @@
     <string name="radio_button_upcoming">Скоро</string>
     <string name="radio_button_playing">В кинотеатрах</string>
     <string name="radio_group_header">Подборка на главном экране:</string>
+
+    <string name="watch_later">Не забудьте посмотреть!</string>
 
     <string name="permission_storage">Нет разрешения. Пожалуйста, предоставьте разрешение</string>
     <string name="downloaded_to_gallery">"Сохранено в галерею"</string>
