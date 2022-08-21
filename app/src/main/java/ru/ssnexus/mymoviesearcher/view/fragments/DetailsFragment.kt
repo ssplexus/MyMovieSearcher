@@ -24,6 +24,7 @@ import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.remote_module.entity.ApiConstants
 import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
 import ru.ssnexus.database_module.data.entity.Film
+import ru.ssnexus.mymoviesearcher.view.notifications.NotificationHelper
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
 
 class DetailsFragment : Fragment() {
@@ -89,6 +90,10 @@ class DetailsFragment : Fragment() {
                 film.isInFavorites = false
                 viewModel.removeFromFavorites(film)
             }
+        }
+
+        binding.detailsFabWatchLater.setOnClickListener {
+            NotificationHelper.createNotification(requireContext(), film)
         }
 
         binding.detailsFabShare.setOnClickListener {

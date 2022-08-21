@@ -1,13 +1,19 @@
 package ru.ssnexus.mymoviesearcher
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.res.Configuration
+import android.os.Build
 import ru.ssnexus.mymoviesearcher.di.AppComponent
 import ru.ssnexus.mymoviesearcher.di.DaggerAppComponent
 import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
 import ru.ssnexus.remote_module.DaggerRemoteComponent
 import ru.ssnexus.database_module.DaggerDatabaseComponent
 import ru.ssnexus.database_module.DatabaseModule
+import ru.ssnexus.mymoviesearcher.view.notifications.NotificationConstants.CHANNEL_DESCRIPTION
+import ru.ssnexus.mymoviesearcher.view.notifications.NotificationConstants.CHANNEL_ID
+import ru.ssnexus.mymoviesearcher.view.notifications.NotificationConstants.CHANNEL_NAME
 import timber.log.Timber
 
 class App : Application() {
@@ -24,6 +30,7 @@ class App : Application() {
         }
         instance = this
 
+        createNotificationChannel()
 
         val databaseModule = DatabaseModule(this)
         val remoteProvider = DaggerRemoteComponent.create()
@@ -48,6 +55,20 @@ class App : Application() {
     // Переопределять необязательно
     override fun onLowMemory() {
         super.onLowMemory()
+    }
+
+    fun createNotificationChannel(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            //Задаем имя, описание и важность канала
+            //Создаем канал, передав в параметры его ID(строка), имя(строка), важность(константа)
+            val mChannel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            //Отдельно задаем описание
+            mChannel.description = CHANNEL_DESCRIPTION
+            //Получаем доступ к менеджеру нотификаций
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            //Регистрируем канал
+            notificationManager.createNotificationChannel(mChannel)
+        }
     }
 
     companion object {
