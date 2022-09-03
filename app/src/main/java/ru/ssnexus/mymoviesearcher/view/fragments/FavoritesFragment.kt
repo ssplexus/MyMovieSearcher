@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
 import ru.ssnexus.mymoviesearcher.databinding.FragmentFavoritesBinding
 import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.utils.AnimationHelper
@@ -29,20 +30,11 @@ class FavoritesFragment : Fragment() {
 
     private lateinit var binding: FragmentFavoritesBinding
     private lateinit var filmsAdapter: FilmListRecyclerAdapter
+    private val scope = CoroutineScope(Dispatchers.IO)
 
     private val viewModel by lazy {
         ViewModelProvider.NewInstanceFactory().create(FavoritesFragmentViewModel::class.java)
     }
-    private var filmsDataBase = listOf<Film>()
-        //Используем backing field
-        set(value) {
-            //Если придет такое же значение, то мы выходим из метода
-            if (field == value) return
-            //Если пришло другое значение, то кладем его в переменную
-            field = value
-            //Обновляем RV адаптер
-            filmsAdapter.addItems(field)
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,21 +82,26 @@ class FavoritesFragment : Fragment() {
         viewModel.favFilmsListLiveData.observe(viewLifecycleOwner,
             {filmsAdapter.addItems(it)})
 
-        viewModel.getData()
+        MainScope().launch {
+            val job = scope.async {
+                viewModel.getData()
+            }
+        }
 
         val itemTouchHelper = ItemTouchHelper( object: ItemTouchHelperCallback(filmsAdapter)
         {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
             {
                 super.onSwiped(viewHolder, direction)
-                viewModel.removeFromFavorites(this.lastSwipedItem as Film)
+                val film = this.lastSwipedItem
+                MainScope().launch {
+                    val job = scope.async {
+                        viewModel.updateFilmState(film)
+                    }
+                }
             }
-
         })
 
         itemTouchHelper.attachToRecyclerView(binding.favoritesRecycler)
     }
-
-
-
 }

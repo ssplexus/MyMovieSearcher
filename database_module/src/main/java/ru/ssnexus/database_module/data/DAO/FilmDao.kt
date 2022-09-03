@@ -20,9 +20,27 @@ interface FilmDao {
     @Query("SELECT * FROM cached_films")
     fun getData(): List<Film>
 
+    @Query("SELECT * FROM cached_films WHERE fav_state > 0")
+    fun getFavorites(): List<Film>
+
+    @Query("SELECT fav_state FROM cached_films WHERE id = :id")
+    fun getFilmFavStateById(id: Int): Int
+
+    @Query("SELECT * FROM cached_films WHERE watch_later_state > 0")
+    fun getWatchLater(): List<Film>
+
+    @Query("SELECT watch_later_state FROM cached_films WHERE id = :id")
+    fun getFilmWatchLaterStateById(id: Int): Int
+
     //Кладём списком в БД, в случае конфликта перезаписываем
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(list: List<Film>)
+
+    @Query("UPDATE cached_films SET fav_state = fav_state * (-1) WHERE id = :id")
+    fun updateFavoriteById(id : Int);
+
+    @Query("UPDATE cached_films SET watch_later_state = watch_later_state * (-1) WHERE id = :id")
+    fun updateWatchLaterById(id : Int);
 
     // Очистка таблицы
     @Query("DELETE FROM cached_films")

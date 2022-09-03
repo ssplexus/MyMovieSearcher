@@ -62,35 +62,32 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
         repo.clearCache()
     }
 
+    // Получить список избранных
     fun getFavorites() : List<Film>
     {
-        return repo.favoritesFilms
+        return repo.getFavorites()
     }
 
-    fun updateFavorites(srcList: List<Film>): List<Film>
+    // Получить состояние карточки фильма (в избранном или нет)
+    fun getFilmFavState(film: Film) : Int = repo.getFilmFavStateById(film.id)
+
+    // Обновить состояние "в избранном" карточки фильма
+    fun updateFilmFavState(film : Film){
+        repo.updateFilmFavStateById(film.id)
+    }
+
+    // Получить список "посмотроеть позже"
+    fun getWatchLater() : List<Film>
     {
-        val dscList = srcList
-        // сверямеся со списком избранных если фильм в списке актуализируем признак isInFavorites
-        var favFilms = repo.favoritesFilms
-        dscList.forEach {film->
-            film.isInFavorites = false
-            if(favFilms.isNotEmpty())
-                favFilms.forEach {favFilm->
-                    if(film.id == favFilm.id) film.isInFavorites = true
-                }
-        }
-        return dscList
+        return repo.getWatchLater()
     }
 
-    fun addToFavorites (film : Film){
-        if(!repo.favoritesFilms.contains(film))
-            repo.favoritesFilms.add(film)
-    }
+    // Получить состояние "посмотреть позже" карточки фильма
+    fun getFilmWatchLaterState(film: Film) : Int = repo.getWatchLaterStateById(film.id)
 
-    fun removeFromFavorites (film: Film)
-    {
-        var removeIdx:Int = repo.favoritesFilms.indexOf(film)
-        if(removeIdx >= 0) repo.favoritesFilms.removeAt(removeIdx)
+    // Обновить состояние "посмотреть позже" карточки фильма
+    fun updateFilmWatchLaterState(film : Film){
+        repo.updateWatchLaterStateById(film.id)
     }
 
     //Метод для сохранения настроек

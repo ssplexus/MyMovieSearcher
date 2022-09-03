@@ -26,6 +26,7 @@ import ru.ssnexus.mymoviesearcher.databinding.FragmentDetailsBinding
 import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.view.notifications.NotificationHelper
 import ru.ssnexus.mymoviesearcher.viewmodel.DetailsFragmentViewModel
+import timber.log.Timber
 
 class DetailsFragment : Fragment() {
     private lateinit var binding:FragmentDetailsBinding
@@ -61,7 +62,6 @@ class DetailsFragment : Fragment() {
         //Получаем наш фильм из переданного бандла
         film = arguments?.get(R.string.parcel_item_film.toString()) as Film
 
-
         viewModel.checkInFavorites(film)
 
         //Устанавливаем заголовок
@@ -75,25 +75,34 @@ class DetailsFragment : Fragment() {
         //Устанавливаем описание
         binding.detailsDescription.text = film.description
 
-        binding.detailsFabFav.setImageResource(
-            if (film.isInFavorites) R.drawable.ic_baseline_favorite_24
-            else R.drawable.ic_baseline_favorite_border_24
-        )
+        MainScope().launch {
+            scope.async {
+                binding.detailsFabFav.setImageResource(
+                    if (viewModel.getFilmFavSate(film) >= 1) R.drawable.ic_baseline_favorite_24
+                    else R.drawable.ic_baseline_favorite_border_24
+                )
+            }
+        }
 
         binding.detailsFabFav.setOnClickListener {
-            if (!film.isInFavorites) {
-                binding.detailsFabFav.setImageResource(R.drawable.ic_baseline_favorite_24)
-                film.isInFavorites = true
-                viewModel.addToFavorites(film)
-            } else {
-                binding.detailsFabFav.setImageResource(R.drawable.ic_baseline_favorite_border_24)
-                film.isInFavorites = false
-                viewModel.removeFromFavorites(film)
+            MainScope().launch {
+                scope.async {
+                    viewModel.updateFilmFavState(film)
+                    if(viewModel.getFilmFavSate(film) >= 1)
+                        binding.detailsFabFav.setImageResource(R.drawable.ic_baseline_favorite_24)
+                    else
+                        binding.detailsFabFav.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+                }
             }
         }
 
         binding.detailsFabWatchLater.setOnClickListener {
-            NotificationHelper.createNotification(requireContext(), film)
+            MainScope().launch {
+                val job = scope.async {
+                    viewModel.updateFilmWatchLaterState(film)
+                }
+            }
+            NotificationHelper.notificationSet(requireContext(), film)
         }
 
         binding.detailsFabShare.setOnClickListener {
