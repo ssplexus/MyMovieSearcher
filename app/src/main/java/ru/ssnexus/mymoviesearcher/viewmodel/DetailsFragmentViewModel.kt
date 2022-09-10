@@ -20,14 +20,17 @@ class DetailsFragmentViewModel:ViewModel() {
     init {
         App.instance.dagger.inject(this)
     }
-    fun addToFavorites(film : Film)
-    {
-        interactor.addToFavorites(film)
+
+    fun getFilmFavSate(film : Film) = interactor.getFilmFavState(film)
+
+    fun updateFilmFavState(film : Film){
+        interactor.updateFilmFavState(film)
     }
 
-    fun removeFromFavorites(film : Film)
-    {
-        interactor.removeFromFavorites(film)
+    fun getFilmWatchLaterSate(film : Film) = interactor.getFilmWatchLaterState(film)
+
+    fun updateFilmWatchLaterState(film : Film){
+        interactor.updateFilmWatchLaterState(film)
     }
 
     fun checkInFavorites(film: Film)

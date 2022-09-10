@@ -3,11 +3,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:visibility="invisible"
     tools:visibility="visible"
     android:background="@drawable/watchlater_background"
     android:id="@+id/watchlater_fragment_root"
     tools:context=".view.fragments.WatchLaterFragment">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/watch_later_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/film_item"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 </FrameLayout>

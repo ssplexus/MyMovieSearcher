@@ -12,9 +12,8 @@ import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.domain.Interactor
-import ru.ssnexus.mymoviesearcher.utils.ConnectionChecker
+import ru.ssnexus.mymoviesearcher.receivers.ConnectionChecker
 import ru.ssnexus.mymoviesearcher.view.fragments.*
-import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {

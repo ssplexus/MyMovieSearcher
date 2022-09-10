@@ -2,14 +2,13 @@ package ru.ssnexus.mymoviesearcher.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.database_module.data.entity.Film
+import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import javax.inject.Inject
 
-class FavoritesFragmentViewModel : ViewModel(){
-
-    val favFilmsListLiveData = MutableLiveData<List<Film>>()
+class WatchLaterFragmentViewModel :ViewModel(){
+    val watchLaterFilmsListLiveData = MutableLiveData<List<Film>>()
 
     //Инициализируем интерактор
     @Inject
@@ -21,11 +20,10 @@ class FavoritesFragmentViewModel : ViewModel(){
 
     fun getData()
     {
-        favFilmsListLiveData.postValue(interactor.getFavorites())
+       watchLaterFilmsListLiveData.postValue(interactor.getWatchLater())
     }
 
     fun updateFilmState(film : Film){
-        interactor.updateFilmFavState(film)
+       interactor.updateFilmWatchLaterState(film)
     }
-
 }

@@ -206,7 +206,7 @@ class HomeFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { list ->
                     Timber.d("Data!!!")
-                    filmsDataBase = viewModel.interactor.updateFavorites(list)
+                    filmsDataBase = list
                 }.addTo(autoDisposable)
 
             viewModel.showProgressBar

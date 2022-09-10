@@ -1,4 +1,4 @@
-package ru.ssnexus.mymoviesearcher.utils
+package ru.ssnexus.mymoviesearcher.receivers
 
 import android.content.BroadcastReceiver
 import android.content.Context
