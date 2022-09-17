@@ -96,6 +96,10 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
     }
     //Метод для получения настроек
     fun getDefaultCategoryFromPreferences() = preferences.getDefaultCategory()
+
+    //Получить время первого запуска
+    fun getFirstLaunchTime() = preferences.getFirstLaunchTime()
+
 }
 
 
