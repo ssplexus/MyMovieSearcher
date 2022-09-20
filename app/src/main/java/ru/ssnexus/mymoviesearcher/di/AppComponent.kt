@@ -1,7 +1,6 @@
 package ru.ssnexus.mymoviesearcher.di
 
 import dagger.Component
-import ru.ssnexus.database_module.DatabaseModule
 import ru.ssnexus.database_module.DatabaseProvider
 import ru.ssnexus.mymoviesearcher.di.modules.DomainModule
 import ru.ssnexus.mymoviesearcher.receivers.ReminderBroadcast
