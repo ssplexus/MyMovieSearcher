@@ -19,6 +19,8 @@ import timber.log.Timber
 class App : Application() {
 
     lateinit var dagger: AppComponent
+
+    var isPromoShown = false
     // Этот метод вызывается при старте приложения до того, как будут созданы другие компоненты приложения
     // Этот метод необязательно переопределять, но это самое хорошее место для инициализации глобальных объектов
     override fun onCreate() {

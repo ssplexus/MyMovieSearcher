@@ -3,6 +3,12 @@
 
     <!--Normal-->
 
+    <!--{Promo-->
+    <dimen name="promo_normal_margin">15dp</dimen>
+    <dimen name="promo_normal_margin_top">36dp</dimen>
+    <dimen name="promo_normal_padding">15dp</dimen>
+    <!--}Promo-->
+
     <!--{RatingDonutView-->
     <dimen name="rating_donut_view_normal_width">50dp</dimen>
     <dimen name="rating_donut_view_normal_height">50dp</dimen>

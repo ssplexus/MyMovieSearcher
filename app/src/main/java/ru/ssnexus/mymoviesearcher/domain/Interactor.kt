@@ -40,8 +40,12 @@ class Interactor(val repo: MainRepository, val retrofitService: TmdbApi, private
     // Получаем результат запроса поиска
     fun getSearchResultFromApi(search: String, page: Int = 1): Observable<List<Film>> = retrofitService.getFilmFromSearch(API.KEY, "ru-RU", search, page)
         .map {
-            Timber.d("tmdbFilms.size = " + it.tmdbFilms.size)
             Converter.convertApiListToDtoList(it.tmdbFilms)
+        }
+
+    fun getFilmFromApi(id: Int): Observable<Film> = retrofitService.getFilm(id, API.KEY, "ru-RU")
+        .map {
+            Converter.convertApiToDto(it)
         }
 
     // Обновление rview исходными значениями при очистки поля поиска фильмов
