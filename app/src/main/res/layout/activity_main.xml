@@ -28,4 +28,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/navigation" />
 
+    <ru.ssnexus.mymoviesearcher.view.customview.PromoView
+        android:id="@+id/promo_view_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        android:translationZ="10dp"
+        android:visibility="gone" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

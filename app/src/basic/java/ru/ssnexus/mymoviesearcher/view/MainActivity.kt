@@ -4,26 +4,38 @@ import android.content.BroadcastReceiver
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.*
 import ru.ssnexus.mymoviesearcher.App
 import ru.ssnexus.mymoviesearcher.R
 import ru.ssnexus.database_module.data.entity.Film
 import ru.ssnexus.mymoviesearcher.databinding.ActivityMainBinding
 import ru.ssnexus.mymoviesearcher.domain.Interactor
 import ru.ssnexus.mymoviesearcher.receivers.ConnectionChecker
+import ru.ssnexus.mymoviesearcher.utils.AutoDisposable
 import ru.ssnexus.mymoviesearcher.utils.Trial
+import ru.ssnexus.mymoviesearcher.utils.addTo
+import ru.ssnexus.mymoviesearcher.view.customview.PromoView
 import ru.ssnexus.mymoviesearcher.view.fragments.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var interactor: Interactor
 
+    private val autoDisposable = AutoDisposable()
     private lateinit var receiver: BroadcastReceiver
-
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +60,9 @@ class MainActivity : AppCompatActivity() {
 
         // Регистрация приёмника
         registerReceiver(receiver, filters)
+
+        //Промо
+        startPromo()
 
         if(savedInstanceState == null)
         {
@@ -183,6 +198,88 @@ class MainActivity : AppCompatActivity() {
         else
             super.onBackPressed()
 
+    }
+
+    private fun startPromo(){
+        if (!App.instance.isPromoShown) {
+            //Получаем доступ к Remote Config
+            val firebaseRemoteConfig = FirebaseRemoteConfig.getInstance()
+
+            //Устанавливаем настройки
+            val configSettings = FirebaseRemoteConfigSettings.Builder()
+                .setMinimumFetchIntervalInSeconds(0)
+                .build()
+            firebaseRemoteConfig.setConfigSettingsAsync(configSettings)
+
+            //Вызываем метод, который получит данные с сервера и вешаем слушатель
+            firebaseRemoteConfig.fetch()
+                .addOnCompleteListener {
+                    //Если все получилось успешно
+                    if (it.isSuccessful) {
+                        //активируем последний полученный конфиг с сервера
+                        firebaseRemoteConfig.activate()
+                        //Получаем ссылку на фильм
+                        val filmLink = firebaseRemoteConfig.getLong(PromoView.POSTER_ID_KEY)
+                        val scope = CoroutineScope(Dispatchers.IO)
+
+                        //Запрашиваем фильм на сервере по id и по результату запускаем постер
+                        MainScope().launch {
+                            scope.async {
+                                interactor.getFilmFromApi(filmLink.toInt()).showPoster()
+                            }
+                        }
+                     }
+                }
+        }
+    }
+
+    //Показ постера
+    private fun showPromo(film: Film){
+        //Если фильм есть
+        if (film?.poster != null) {
+            //Ставим флаг, что уже промо показали
+            App.instance.isPromoShown = true
+            //Включаем промо верстку
+            binding.promoViewGroup.apply {
+                //Делаем видимой
+                visibility = View.VISIBLE
+                //Анимируем появление
+                animate()
+                    .setDuration(PromoView.POSTER_ANIM_DURATION)
+                    .alpha(PromoView.POSTER_ANIM_ALPHA)
+                    .start()
+                //Вызываем метод, который загрузит постер в ImageView
+                film?.let { it.poster?.let {
+                        poster -> setLinkForPoster(poster) }
+                }
+
+                //Кнопка по нажатии на которую проимсходит переход к фильму
+                watchButton.setOnClickListener {
+                    visibility = View.GONE
+                    film?.let {
+                        launchDetailsFragment(it)
+                    }
+                }
+                //Кнопка для закрытия промо
+                binding.closeButton.setOnClickListener {
+                    visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    //Запуск показа постера
+    private fun Observable<Film>.showPoster(){
+        this.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onError = {
+                },
+                onNext = {
+                    showPromo(it)
+                }
+            )
+            .addTo(autoDisposable)
     }
 
 }
